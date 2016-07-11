@@ -13,7 +13,7 @@ def test():
         with test_image.container('sleep 100') as container1: #Run container with optional command. Automatically deletes container at the end of the block.
             container1.inside('echo "hello There!"') #Run command in running container. If the container's not running, it will error.
 
-        test_image.tag('dockerhub.cerner.com/jamesaudretsch/myawesomeimage:latest') #Tag it with a solid name
+        test_image.tag('dockerhub.cerner.com/jamesaudretsch/myawesomeimage', 'newest') #Tag it with a solid name
         test_image.push() # Push the image
         #test_image.remove() #Remove the image, if you really want.
 
@@ -22,11 +22,11 @@ def test():
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         with pipe.build() as myImage, myImage.container('sleep 100') as container1: #Image removes itself, container removes itself.
             container1.inside('echo "hello There!"')
-            myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage:latest").push()
+            myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push()
 
     #Or even simpler, if you don't have to clone. Python evaluates as nested 'with's. Maybe two lines IS execssively short:
     with Pipeline() as pipe, pipe.pull('ubuntu:14.04') as myImage, myImage.container('sleep 100') as container1:
-        myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage:latest").push() if container1.inside('echo "hello There!"') else None
+        myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push() if container1.inside('echo "hello There!"') else None
 
 
 

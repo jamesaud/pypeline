@@ -10,9 +10,9 @@ def test():
         stage("Build")
         rp.build()
         stage("Test")
-        rp.test('rspec spec', 'echo "hello world"') # Run tests concurrently
+        rp.test('rspec spec', 'echo "hello world"')  # Run tests concurrently in different containers
         stage("Push")
-        rp.push()
+        rp.push('newest')  # Tag before it pushes, defaults to latest
 
 if __name__ == "__main__":
     test()

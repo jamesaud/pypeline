@@ -76,6 +76,11 @@ class ImageTest(unittest.TestCase):
         with self.image.container('echo "hello world"') as container2: # This should run in the container, I don't know how to verify it.
             self.assertTrue(tdc.container_exists(container2.id))
 
+    def test_tag(self):
+        repo, tagged = 'my.repo.com/james', 'newest'
+        self.image.tag(repo, tagged)
+        self.assertIn(repo + ':' + tagged, dc.find_image(self.image.id)['RepoTags'])
+
     @classmethod
     def tearDownClass(cls):  # Delete the workspace folder
         cls.image.remove()

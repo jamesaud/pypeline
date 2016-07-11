@@ -21,11 +21,11 @@ class RailsPipeline(object):
                 pass
 
     # tags the image correctly
-    def _tag(self, tag='latest'):
+    def _tag(self, tag):
         def parse_repo_name():
             return self.git_url.split('.com/')[-1].lower() # Get everything after github.com/ and lowercase it
 
-        self.image.tag(self.registry_url + '/' + parse_repo_name() + ':' + tag)
+        self.image.tag(self.registry_url + '/' + parse_repo_name(), tag)
 
     def clone(self):
         self.pipe.clone(self.git_url)
@@ -35,8 +35,8 @@ class RailsPipeline(object):
     def build(self):
         self.image = self.pipe.build(directory=self.dockerfile_dir)
 
-    def push(self):
-        self._tag()
+    def push(self, tag='latest'):
+        self._tag(tag)
         self.image.push()
         self._printUploadURL()
 

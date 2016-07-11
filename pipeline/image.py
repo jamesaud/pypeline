@@ -24,8 +24,7 @@ class Image(object):
     #Run container with optional args
     #String -> Container
     def container(self, args=''):
-        uniqueName = str(uuid4())
-        return Container(self.id, uniqueName, args) #Random unique container name.
+        return Container(self.id, args) #Random unique container name.
 
     # Remove the image
     def remove(self):
@@ -38,9 +37,8 @@ class Image(object):
         dc.push(self.name)
 
     # Tags an image
-    def tag(self, tag):
-        self.name = tag
-        call(['docker', 'tag', self.id, tag])
+    def tag(self, repo, tagged='latest'):
+        self.name = dc.tag(self.id, repo, tagged)
         return self
 
     #Implement 'with' functionality

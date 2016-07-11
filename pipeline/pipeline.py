@@ -50,15 +50,15 @@ class Pipeline(object):
             os.chdir(self.work_directory)
             os.chdir('..')
             shutil.rmtree(self.work_directory, ignore_errors=True) #Remove the workspace recursively.
-        except OSError:
-            print(OSError, "The pipeline tried to delete directory at  " + self.work_directory)
+        except OSError as e:
+            print(e, "The pipeline tried to delete directory at  " + self.work_directory)
 
     #Copys a file into the given path in the Cloned.
     def copyToClonedDirectory(self, full_file_path):
         try:
             copy(full_file_path, self.cloned_directory)
-        except TypeError:
-            print(TypeError, " Are you sure you cloned from git?")
+        except TypeError as e:
+            print(e, " Are you sure you cloned from git?")
 
     #Implement 'with' functionality
     def __enter__(self):
