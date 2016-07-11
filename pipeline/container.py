@@ -1,4 +1,5 @@
 from subprocess import call, Popen, PIPE
+import config.docker_client as dc
 from uuid import uuid4
 
 class Container(object):
@@ -9,7 +10,7 @@ class Container(object):
         self.name = container_name #Will be a random string created in image.py
         self.id = None
         with Popen('docker inspect --format="{{.Id}}" ' + container_name, shell=True, stdout=PIPE).stdout as stdout:
-            self.id = stdout.read().strip() #ID is the Unique ID docker gives the container
+            self.id = str(stdout.read().strip())[2:-1]
 
     #Run commands inside a running container.
     #This will error if the container isn't running.
