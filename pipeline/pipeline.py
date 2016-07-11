@@ -15,13 +15,13 @@ class Pipeline(object):
         self.cloned_directory = None
         self.work_directory = os.path.abspath('.') #Save as full path
 
-    #Clone from git url, and provide workspace
+    # Clone from git url, and provide workspace
     def clone(self, git_url):
         git_workspace = str(uuid4())
         call(['git', 'clone', git_url, git_workspace])
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)
 
-    #Class Decorator: executes function in Clone directory, and returns to work directory.
+    # Class Decorator: executes function in Clone directory, and returns to work directory.
     def _returnToWorkDir(function):
         def wrapper(self, *args, **kwargs):
             result = function(self, *args, **kwargs)
@@ -29,7 +29,7 @@ class Pipeline(object):
             return result
         return wrapper
 
-    #Build image in cloned directory, or specified directory
+    # Build image in cloned directory, or specified directory
     def build(self, image_tag=str(uuid4()), **directory):
         dockerDir = directory.get('directory')
         if not dockerDir: # see if the user entered the optional argument
@@ -53,14 +53,14 @@ class Pipeline(object):
         except OSError as e:
             print(e, "The pipeline tried to delete directory at  " + self.work_directory)
 
-    #Copys a file into the given path in the Cloned.
+    # Copys a file into the given path in the Cloned.
     def copyToClonedDirectory(self, full_file_path):
         try:
             copy(full_file_path, self.cloned_directory)
         except TypeError as e:
             print(e, " Are you sure you cloned from git?")
 
-    #Implement 'with' functionality
+    # Implement 'with' functionality
     def __enter__(self):
         return self
 
