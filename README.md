@@ -1,5 +1,5 @@
 # pypeline
-a docker pipeline in python
+a docker pipeline in python - clone from git, build docker image, run tests in docker containers, push to docker repo.
 
 I've written many but not all the tests yet. Use cases are in example.py. Clone and run example_pipe.py and example_rails.py to see it in action.
 
