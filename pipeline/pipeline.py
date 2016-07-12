@@ -22,6 +22,7 @@ class Pipeline(object):
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)
 
     # Class Decorator: executes function in Clone directory, and returns to work directory.
+    # Isn't used anywhere in the code anymore.
     def _returnToWorkDir(function):
         def wrapper(self, *args, **kwargs):
             result = function(self, *args, **kwargs)
@@ -45,13 +46,14 @@ class Pipeline(object):
         dc_pull(image_tag)
         return Image(image_tag)
 
+    # Delete the work directory and everything inside of it
     def close(self):
         try:
             os.chdir(self.work_directory)
             os.chdir('..')
             shutil.rmtree(self.work_directory, ignore_errors=True) #Remove the workspace recursively.
         except OSError as e:
-            print(e, "The pipeline tried to delete directory at ", self.work_directory)
+            print(e, "The pipeline tried and failed to delete directory at ", self.work_directory)
 
     # Copys a file into the given path in the Cloned.
     def copyToClonedDirectory(self, full_file_path):

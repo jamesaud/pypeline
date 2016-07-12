@@ -1,7 +1,15 @@
-import docker
 import os
+import docker.tls as tls
+from docker import Client
 
-cli = docker.from_env(assert_hostname=False)
+CERTS = os.path.join(os.path.expanduser('~'), '.docker', 'machine', 'machines', 'default')
+docker_machine_ip='192.168.99.100'
+tls_config = tls.TLSConfig(
+    client_cert=(os.path.join(CERTS, 'cert.pem'), os.path.join(CERTS,'key.pem')),
+    ca_cert=os.path.join(CERTS, 'ca.pem'),
+    verify=True
+)
+cli = Client(base_url='https://{}:2376'.format(docker_machine_ip), tls=tls_config)
 
 
 def format_decorator(function): #Place on any function that prints, for better output formatting
@@ -57,10 +65,11 @@ def tag(image_id, repo, tag):
     print('Tagged', image_id, tag)
     return tagged
 
+
 # Returns container id
 # -> str
 def run_container(image, container_name, args): # Image: name or id
-    container = cli.create_container(image=image, name=container_name, detach=True, command=args)
+    container = cli.create_container(image=image, name=container_name, detach=True, command=args) # args can be a string or list
     container_id = container['Id']  # Get id from dictionary
     cli.start(container_id)  # Start the container
     print('Started container:', container_name, 'with commands:', "'{}'".format(args))

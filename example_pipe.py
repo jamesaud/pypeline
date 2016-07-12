@@ -2,16 +2,16 @@ from pipeline.pipeline import Pipeline
 
 #------The good way to do this------
 def test():
-    with Pipeline() as pipe: #Cleans up (deletes work_directory) automatically
-        test_image = pipe.pull('ubuntu:14.04') #You can pull the image
-
+    with Pipeline() as pipe: # Cleans up (deletes work_directory) automatically at the end of the block
+        test = pipe.pull('busybox') # You can pull the image
+        test.remove()  # Removed the image
         #or you can clone from git and build...
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         test_image = pipe.build()  #Build image, optional name, optional directory path.
         #Could be: pipe.build("myImgName", directory="dockerstuff")
 
-        with test_image.container('sleep 100') as container1: #Run container with optional command. Automatically deletes container at the end of the block.
-            container1.inside('echo "hello There!"') #Run command in running container. If the container's not running, it will error.
+        with test_image.container('sleep 10') as container1:  # Run container with optional command. Automatically deletes container at the end of the block.
+            container1.inside('echo "hello There!"')  # Run command in running container. If the container's not running, it will error.
 
         test_image.tag('dockerhub.cerner.com/jamesaudretsch/myawesomeimage', 'newest')  # Tag it with a solid name
         test_image.push()
@@ -26,12 +26,12 @@ def test():
 
     #Or even simpler, if you don't have to clone. Python evaluates as nested 'with's. Maybe two lines IS execssively short:
     with Pipeline() as pipe, pipe.pull('ubuntu:14.04') as myImage, myImage.container('sleep 100') as container1:
-        myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push('bestversion') if container1.inside('echo "hello There!"') else None
+        myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push() if container1.inside('echo "hello There!"') else None
 
 
     #-----The bad way to do this, but could be useful in some cases------
     pipe = Pipeline()
-    test_image = pipe.pull('ubuntu:14.04') #Pull image
+    test_image = pipe.pull('busybox') #Pull image
     #or clone from git and build...
     pipe.clone('https://github.cerner.com/JA048043/docker_test') #Clone from git
     test_image = pipe.build('myawesomeimage') #Build image, optional directory path as second argument.
@@ -41,6 +41,10 @@ def test():
     #test_image.remove() #optionally remove the image
     pipe.close() #Clean up
 
+  #  with Pipeline() as pipe:
+  #      img = pipe.pull('busybox')
+  #      with img.container('sleep 100') as cont:
+  #          cont.inside('echo "hello worl world -----------"')
 
 if __name__ == "__main__":
     test()
