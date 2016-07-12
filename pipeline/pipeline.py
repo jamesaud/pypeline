@@ -9,11 +9,11 @@ from config.docker_client import pull as dc_pull
 
 class Pipeline(object):
     def __init__(self):
-        work_directory = str(uuid4()) #Creates workspace for this pipeline
+        work_directory = str(uuid4())  # Creates workspace for this pipeline
         os.makedirs(work_directory)
         os.chdir(work_directory)
         self.cloned_directory = None
-        self.work_directory = os.path.abspath('.') #Save as full path
+        self.work_directory = os.path.abspath('.')  # Save as full path
 
     # Clone from git url, and provide workspace
     def clone(self, git_url):
@@ -51,7 +51,7 @@ class Pipeline(object):
             os.chdir('..')
             shutil.rmtree(self.work_directory, ignore_errors=True) #Remove the workspace recursively.
         except OSError as e:
-            print(e, "The pipeline tried to delete directory at  " + self.work_directory)
+            print(e, "The pipeline tried to delete directory at ", self.work_directory)
 
     # Copys a file into the given path in the Cloned.
     def copyToClonedDirectory(self, full_file_path):
