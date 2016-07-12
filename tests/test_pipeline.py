@@ -1,7 +1,4 @@
-from subprocess import call, Popen, PIPE
 from pipeline.pipeline import Pipeline
-from pipeline.image import Image
-
 import unittest
 import tests.test_dc as tdc
 import config.docker_client as dc

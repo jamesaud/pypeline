@@ -1,8 +1,5 @@
-from subprocess import call, Popen, PIPE
-import config.docker_client as dc
 from uuid import uuid4
 import config.docker_client as dc
-import docker
 
 class Container(object):
     def __init__(self, image_id, args=''):

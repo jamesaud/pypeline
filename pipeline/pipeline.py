@@ -4,7 +4,7 @@ import shutil
 from subprocess import call
 from uuid import uuid4
 from shutil import copy
-from pipeline.image import Image
+from .image import Image
 from config.docker_client import pull as dc_pull
 
 class Pipeline(object):

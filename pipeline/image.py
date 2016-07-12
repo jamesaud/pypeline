@@ -1,9 +1,6 @@
-from subprocess import call, Popen, PIPE
-from uuid import uuid4
-from pipeline.container import Container
+from .container import Container
 import config.docker_client as dc
-import os
-import json
+
 
 class Image(object):
     def __init__(self, image_tag, build=False, path=None):

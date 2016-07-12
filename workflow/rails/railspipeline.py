@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 from pipeline.pipeline import Pipeline
 from config import config
 
