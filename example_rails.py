@@ -1,5 +1,6 @@
 from workflow.rails.railspipeline import RailsPipeline
 
+
 def stage(name):
     print("\n----- {} -----\n".format(name) + "-" * 30 + "\n")
 

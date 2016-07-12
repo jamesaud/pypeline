@@ -3,6 +3,7 @@ import unittest
 import tests.test_dc as tdc
 import config.docker_client as dc
 import os
+import docker.errors
 
 
 # This is a tricky, messy unit test because there are workspaces and docker images and containers created. It should all clean up by the end though.
@@ -59,7 +60,7 @@ class PipelineTest(unittest.TestCase):
 
 """
 # Build functionality is tested through the PipelineTest in test_build()
-class ImageTest(unittest.TestCase):
+class Image_And_Container_Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):  # Run once for class
         cls.pipe = Pipeline()
@@ -68,15 +69,28 @@ class ImageTest(unittest.TestCase):
     def test_container(self):
         with self.image.container() as container1:
             cont1_id = container1.id
-            self.assertTrue(tdc.container_exists(container1.id)) # Assert it exists
-        self.assertFalse(tdc.container_exists(cont1_id)) # Assert it is automatically destroyed
-        with self.image.container('echo "hello world"') as container2: # This should run in the container, I don't know how to verify it.
+            self.assertTrue(tdc.container_exists(container1.id))  # Assert it exists
+        self.assertFalse(tdc.container_exists(cont1_id))  # Assert it is automatically destroyed
+        with self.image.container('echo "hello world"') as container2:  # This should run in the container, I don't know how to verify it.
             self.assertTrue(tdc.container_exists(container2.id))
 
     def test_tag(self):
         repo, tagged = 'my.repo.com/james', 'newest'
         self.image.tag(repo, tagged)
         self.assertIn(repo + ':' + tagged, dc.find_image(self.image.id)['RepoTags'])
+
+    def test_inside(self):
+        # Exec-ing inside a running container should NOT throw an error. If it does, we know that the test failed.
+        try:
+            with self.image.container('sleep 6') as container1:  # Run container with optional command. Automatically deletes container at the end of the block.
+                container1.inside('echo "hello There!"')
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)
+        # Exec-ing inside a stopped container should give us an error. The container stops because there are no specified commands
+        with self.image.container() as container1:
+            with self.assertRaises(docker.errors.APIError):
+                container1.inside('echo "I cant exec code in a non-running container"')
 
     @classmethod
     def tearDownClass(cls):  # Delete the workspace folder

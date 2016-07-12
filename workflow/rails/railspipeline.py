@@ -16,7 +16,7 @@ class RailsPipeline(object):
     # Runs shell test commands in container(s?) of given image
     def test(self, *commands):
         for command in commands: # Or should we run all tests in the same container?
-            with self.image.container(command):  # Run each command in parallel in its own container
+            with self.image.container(command) as cont:  # Run each command in parallel in its own container
                 pass
 
     # tags the image correctly
