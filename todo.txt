@@ -1,0 +1,4 @@
+Option for parallel (multithreaded) deploying of containers when running tests.
+Label the output accordingly.
+
+Dockerhub registry credentials option.

@@ -47,12 +47,12 @@ class RailsPipeline(object):
     def _tag(self, tag):
         """
         Tag the image correctly. Should looke like registry/repo/image:tag
-        :param tag:
-        :return:
+        :param tag: Str - the tag to give the image. This is the part of the url that is after ":"
+        :return: None
         Notes - could look like 'dockerhub.com/james/myrepo/myimage:latest'
         """
         def parse_repo_name():
-            return self.git_url.split('.com/')[-1].lower()  # Get everything after 'github.com/' and lowercase it
+            return self.git_url.split('.com/')[-1].lower()  # Get everything after 'github.com/' and lowercase it.
 
         self.image.tag(self.registry_url + '/' + parse_repo_name(), tag)  # Set the image tag.
 
