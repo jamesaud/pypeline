@@ -8,46 +8,58 @@ from .image import Image
 from config.docker_client import pull as dc_pull
 
 class Pipeline(object):
+    """
+    A pipeline is a workspace with methods to do the pipeline process.
+    The pipeline process is: clone from Git, build image, run containers, push image to repository.
+    """
     def __init__(self):
-        work_directory = str(uuid4())  # Creates workspace for this pipeline
-        os.makedirs(work_directory)
+        """Initialize class, create work directory and chdir into it.
+        :attribute self.work_directory: Str - The full path of the work directory.
+        :attribute self.cloned_directory: Str -The full path of the github cloned directory.
+        """
+        work_directory = str(uuid4())
+        os.makedirs(work_directory)  # Creates workspace for this pipeline
         os.chdir(work_directory)
-        self.cloned_directory = None
+        self.cloned_directory = None  # Set when calling self.clone()
         self.work_directory = os.path.abspath('.')  # Save as full path
 
-    # Clone from git url, and provide workspace
     def clone(self, git_url):
+        """Clones code from Github.
+        :param git_url: Str - the url to clone from
+        :return: None
+        """
         git_workspace = str(uuid4())
-        call(['git', 'clone', git_url, git_workspace])
-        self.cloned_directory = os.path.join(self.work_directory, git_workspace)
+        call(['git', 'clone', git_url, git_workspace])  # Clone in a unique directory.
+        self.cloned_directory = os.path.join(self.work_directory, git_workspace)  # Path looks like 'work_directory/git_directory'
 
-    # Class Decorator: executes function in Clone directory, and returns to work directory.
-    # Isn't used anywhere in the code anymore.
-    def _returnToWorkDir(function):
-        def wrapper(self, *args, **kwargs):
-            result = function(self, *args, **kwargs)
-            os.chdir(self.work_directory)
-            return result
-        return wrapper
 
-    # Build image in cloned directory, or specified directory
     def build(self, image_tag=str(uuid4()), **directory):
-        dockerDir = directory.get('directory')
-        if not dockerDir: # see if the user entered the optional argument
-            dockerDir = '.' #Default path the docker file is at.
-        path_to_dockerfile = os.path.join(self.cloned_directory, dockerDir)
-        image = Image(image_tag, True, path_to_dockerfile)  # Build = True.
-        return image
+        """Build image in cloned directory, or user specified path relative to the cloned directory.
+        :param image_tag: Str - the docker name to give the image. Creates a name if not given.
+        :param directory: Str - the directory path relative to the cloned directory. Defaults to '.', the top level.
+        :return: Image
+        """
+        dockerDir = directory.get('directory')  # dict.get(value) can return None, dict[value] will raise an error.
+        if not dockerDir:  # Check if optional directory argument was passed.
+            dockerDir = '.'  # Default path the docker file is at.
+        path_to_dockerfile = os.path.join(self.cloned_directory, dockerDir)  # Full path to the dockerfile
+        return Image(image_tag, True, path_to_dockerfile)  # Build = True.
 
-    # Pull Docker image
-    # str -> Image
+
+    # Improve: Should take in an optional registry name. Should it really pull the image here or in the Image class?
     def pull(self, image_tag):
-        #call(['docker', 'pull', image_tag])
-        dc_pull(image_tag)
+        """Pull docker image from dockerhub.
+        :param image_tag: Str - the docker image to pull.
+        :return: Image
+        """
+        dc_pull(image_tag)  # Pulls the docker image to the machine.
         return Image(image_tag)
 
-    # Delete the work directory and everything inside of it
+
     def close(self):
+        """Delete the work directory.
+        :return: None
+        """
         try:
             os.chdir(self.work_directory)
             os.chdir('..')
@@ -55,16 +67,20 @@ class Pipeline(object):
         except OSError as e:
             print(e, "The pipeline tried and failed to delete directory at ", self.work_directory)
 
-    # Copys a file into the given path in the Cloned.
+
     def copyToClonedDirectory(self, full_file_path):
+        """
+        Copy a file into the cloned directory.
+        :param full_file_path: Str - the full path of the file to copy.
+        :return: None
+        """
         try:
             copy(full_file_path, self.cloned_directory)
         except TypeError as e:
             print(e, " Are you sure you cloned from git?")
 
-    # Implement 'with' functionality
-    def __enter__(self):
+    def __enter__(self):  # Implement 'with' functionality
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self, exc_type, exc_value, traceback):  # Implement 'with' functionality
         self.close()

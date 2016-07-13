@@ -8,3 +8,4 @@ Clone the repository, and run 'example_pipe.py' or 'example_rails.py' to see how
 example_pipe - the generic version of a pipeline that you can build, with several example use cases.
 
 example_rails - a specialized verison build for rails apps. The goal is to not require developers to have a Dockerfile in their project. Expands using the workflow/rails module.
+

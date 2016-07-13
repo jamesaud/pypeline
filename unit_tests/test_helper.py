@@ -1,5 +1,9 @@
 import config.docker_client as dc
 
+"""
+Helper functions for unit tests.
+"""
+
 
 def image_exists(image_id):
     try:
