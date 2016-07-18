@@ -31,7 +31,6 @@ class Pipeline(object):
         call(['git', 'clone', git_url, git_workspace])  # Clone in a unique directory.
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)  # Path looks like 'work_directory/git_directory'
 
-
     def build(self, image_tag=str(uuid4()), **directory):
         """Build image in cloned directory, or user specified path relative to the cloned directory.
         :param image_tag: Str - the docker name to give the image. Creates a name if not given.
@@ -44,8 +43,7 @@ class Pipeline(object):
         path_to_dockerfile = os.path.join(self.cloned_directory, dockerDir)  # Full path to the dockerfile
         return Image(image_tag, True, path_to_dockerfile)  # Build = True.
 
-
-    # Improve: Should take in an optional registry name. Should it really pull the image here or in the Image class?
+    @classmethod
     def pull(self, image_tag):
         """Pull docker image from dockerhub.
         :param image_tag: Str - the docker image to pull.
@@ -53,7 +51,6 @@ class Pipeline(object):
         """
         dc_pull(image_tag)  # Pulls the docker image to the machine.
         return Image(image_tag)
-
 
     def close(self):
         """Delete the work directory.
@@ -66,7 +63,6 @@ class Pipeline(object):
         except OSError as e:
             print(e, "The pipeline tried and failed to delete directory at ", self.work_directory)
 
-
     def copyToClonedDirectory(self, full_file_path):
         """
         Copy a file into the cloned directory.
@@ -78,6 +74,7 @@ class Pipeline(object):
         except TypeError as e:
             print(e, " Are you sure you cloned from git?")
 
+    @classmethod
     def login(self, **login):
         """
         Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
