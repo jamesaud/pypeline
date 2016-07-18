@@ -12,7 +12,7 @@ def test():
     4. Tag image with nice name.
     5. Push image to repository.
     -----------
-    Notes - the image used in this test might fail to delete if it already has dependent images on your machine.
+    Notes - the images used in this example might fail to delete if it already has dependent images on your machine.
     """
     """
     Good way to run a pipeline.
