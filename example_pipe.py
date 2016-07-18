@@ -41,7 +41,8 @@ def test():
 
 
     """
-    The shortest way to achieve the same results. With an example of logging in to dockerhub.com
+    The shortest way to achieve the same results.
+    With an example of logging in to dockerhub.com
     """
     with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.container('echo "rspec"'):
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
