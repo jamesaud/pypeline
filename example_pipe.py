@@ -46,8 +46,7 @@ def test():
     """
     with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.container('echo "rspec"'):
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
-        myImage.tag("justatest1232123/myawesomeimage", "jusatest")  # Tag it like docker tag
-        myImage.push()
+        myImage.tag("justatest1232123/myawesomeimage", "jusatest").push()
 
 
 
@@ -58,7 +57,7 @@ def test():
     test_image = pipe.pull('busybox')  # Pull image
     test_image.remove()
     pipe.clone('https://github.cerner.com/JA048043/docker_test')  # Clone from git
-    test_image = pipe.build('myawesomeimage')  # Build image, optional directory path as second argument.
+    test_image = pipe.build('myawesomeimage',)  # Build image, optional directory path as second argument.
     container1 = test_image.container('sleep 6')  # Run container with optional command
     container1.inside('echo "hello There!"')  # Run command in running container. If the containers not running, it gives the error.
     container1.remove()  # Destroy container
