@@ -14,48 +14,56 @@ class Image(object):
         :param build: Bool - True to build from the specified dockerfile path.
         :param path: Str - the path to the dockerfile relative to the cloned directory.
         :attribute self.name: Str - the name of the docker image.
-        :attribute self.id: Str - the id of the docker image.
+        :attribute self.__id__: Str - the id of the docker image.
         """
         if build:
             if not path:  # If build is True, there must be a specified path
                 raise TypeError("You must specify a path!")
             dc.build(path, image_tag)  # Build docker image from the specified directory
-        self.name = image_tag
-        data = dc.find_image_by_name(self.name)  # Dictionary with related information of the image
+        self.__nametag__ = image_tag
+        data = dc.find_image_by_name(self.__nametag__)  # Dictionary with related information of the image
         if not data:
             raise TypeError("The image is invalid, docker tried to find the image with the given or generated name,",
                             image_tag, "but didn't find anything.")
-        self.id = data[0]['Id'].split('sha256:')[-1]  # Get the unique ID number only
+        self.__id__ = data[0]['Id'].split('sha256:')[-1]  # Get the unique ID number only
 
     def container(self, args=''):
         """Create and run a container with given commands.
         :param args: String - the commands to run in a docker container.
         :return: Container
         """
-        return Container(self.id, args) #Random unique container name.
+        return Container(self.__id__, args) #Random unique container name.
 
     def remove(self):
         """Delete the image.
         :return: None
         """
-        dc.remove_image(self.name)
+        dc.remove_image(self.__nametag__)
 
     # Improve - option to push to specified registry.
     def push(self):
         """Push image (the registry should be in the name) to registry.
         :return: None
         """
-        dc.push(self.name)
+        dc.push(self.__nametag__)
 
     def tag(self, repo, tagged='latest'):
         """Tag the image. Similar to 'docker tag ...'.
         :param repo: Str - the registry + repo name eg. 'dockerhub.com/james/myrepo'
         :param tagged: Str - the tag to give the image. eg. 'coolv2'. Defaults to 'latest'
         :return: self
-        - The image name will now be repo:tag, eg. self.name = 'dockerhub.com/james/myrepo:coolv2'
+        - The image name will now be repo:tag, eg. self.__nametag__ = 'dockerhub.com/james/myrepo:coolv2'
         """
-        self.name = dc.tag(self.id, repo, tagged)
+        self.__nametag__ = dc.tag(self.__id__, repo, tagged)
         return self
+
+    @property
+    def id(self):
+        return self.__id__
+
+    @property
+    def name(self):
+        return self.__nametag__
 
     def __enter__(self):  # Implement 'with' functionality
         return self

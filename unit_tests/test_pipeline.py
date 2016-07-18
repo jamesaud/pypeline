@@ -124,4 +124,4 @@ class TestPipeline(unittest.TestCase):
 # Run unit tests when calling script
 if __name__ == "__main__":
     unittest.main()
-    logging.info("This test requires that docker daemon is installed and running.")
+    print("This test requires that docker daemon is installed and running.")

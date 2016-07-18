@@ -13,7 +13,7 @@ def test():
         rp.build()
         stage("Test")
         rp.test('rspec spec', 'echo "hello world"')  # Eventually this command will run in the same container.
-        # rp.test('rspec spec')                       # And this command will run a parallel container.
+        # rp.test('rspec spec')                      # And this command will run a parallel container.
         stage("Push")
         rp.push('newest')  # Tag before it pushes, defaults to latest with no argument
 
