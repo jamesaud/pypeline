@@ -1,4 +1,5 @@
 Option for parallel (multithreaded) deploying of containers when running tests.
+Running threads in parallel for the logging? Is it correct?
 Label the output accordingly.
 
 Dockerhub registry credentials option.

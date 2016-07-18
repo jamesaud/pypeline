@@ -1,4 +1,7 @@
+import logging
 from workflow.rails.railspipeline import RailsPipeline
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def stage(name):

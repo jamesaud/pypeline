@@ -1,20 +1,6 @@
-import os
 import threading
-import docker.tls as tls
-from docker import Client
-
-# Improve - transition the config stuff into config.config.py
-# Config needed to connect to the docker client.
-CERTS = os.path.join(os.path.expanduser('~'), '.docker', 'machine', 'machines', 'default')
-docker_machine_ip = '192.168.99.100'
-tls_config = tls.TLSConfig(
-    client_cert=(os.path.join(CERTS, 'cert.pem'), os.path.join(CERTS,'key.pem')),
-    ca_cert=os.path.join(CERTS, 'ca.pem'),
-    verify=True
-)
-cli = Client(base_url='https://{}:2376'.format(docker_machine_ip), tls=tls_config)
-
-threads = []  # Threads running. Refer to description below.
+import logging
+from .config import DOCKER_CLIENT
 
 """
 The functions in this file are wrappers over the dockerpy api, an api for communicating directly with the docker client.
@@ -30,6 +16,8 @@ Notes - Don't thread any printing function. For example, threading the build fun
         following commands before the image is done building!
 """
 
+threads = []  # Threads running. Refer to description above.
+cli = DOCKER_CLIENT
 
 def threaded(function):
     """
@@ -51,7 +39,7 @@ def print_generator(generator):
     :return: None
     """
     for line in generator:
-        print(line)
+        logging.info(line)
 
 
 @threaded
@@ -110,7 +98,7 @@ def remove_image(image):
     :return: None
     """
     cli.remove_image(image, True)
-    print("Removed image:", image)
+    logging.info("Removed image: " + image)
 
 
 def remove_container(container):
@@ -120,7 +108,7 @@ def remove_container(container):
     :return: None
     """
     cli.remove_container(container, True)
-    print("Removed container :", container)
+    logging.info("Removed container : " + container)
 
 
 def build(dockerfile_path, image_name):
@@ -130,11 +118,10 @@ def build(dockerfile_path, image_name):
     :param image_name: Str - name to give the image.
     :return: None
     """
-    print("Building image", image_name)
-    print(os.listdir(os.getcwd()))
+    logging.info("Building image " + image_name)
     logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name)
     for line in logs_generator:
-        print(line)
+        logging.info(line)
 
 
 # Improve - should be able to give repository login credentials.
@@ -145,7 +132,7 @@ def push(image_name):
     :return: None
     """
     for line in cli.push(image_name, stream=True):
-        print(line)
+        logging.info(line)
 
 
 # Improve - use the docker api to get the actual tag of the image, not creating it with by hand. Might run into errors
@@ -161,7 +148,7 @@ def tag(image_id, repo, tagged):
     """
     tagged_name = repo + ":" + tagged
     cli.tag(image_id, repo, tagged)
-    print('Tagged', image_id, tagged)
+    logging.info('Tagged ' + image_id + " " + tagged)
     return tagged_name
 
 
@@ -172,12 +159,12 @@ def run_container(image, container_name, args):
     :param container_name: Str - the name to give the container.
     :param args: Str or List - the command to run in the container.
     :return: Str - the id of the generated container.
-    - Note - the output is ran through the threaded print generator method.
+    - Note - the output is ran through the threaded logging.info generator method.
     """
     container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
     container_id = container['Id']  # Get id from dictionary
     cli.start(container_id)  # Start the container
-    print('Started container:', container_name, 'with commands:', "'{}'".format(args))
+    logging.info('Started container: ' + container_name + ' with commands: ' + "'{}'".format(args))
     print_threaded_generator(cli.logs(container=container_id, stdout=True, stream=True))  # Output logs in real time
     return container_id
 
@@ -190,7 +177,7 @@ def remove_container(container):
     """
     cli.stop(container=container)
     cli.remove_container(container=container, v=True) # v=True means force remove
-    print('Removed container:', container)
+    logging.info('Removed container: ' + container)
 
 
 def inside_container(container_id, args):
@@ -202,7 +189,22 @@ def inside_container(container_id, args):
     """
     executor = cli.exec_create(container=container_id, cmd=args)
     exec_id = executor['Id']
-    print('Running inside container:', container_id, 'with commands:', "'{}'".format(args))
+    logging.info('Running inside container: ' + container_id + ' with commands: ' + "'{}'".format(args))
     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
 
+def login(**login):
+    """
+    Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
+    :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
+    :return: None
+    - Note - refer to https://github.com/docker/docker-py/blob/master/docs/api.md for the dockerpy api
+    """
+    login_data = cli.login(**login)
+    username, registry = login_data.get('username'), login_data.get('registry')
+    response = 'Logged in'
+    if registry:
+        response += ' at registry ' + registry
+    if response:
+        response += ' with user ' + username
+    logging.info(response)

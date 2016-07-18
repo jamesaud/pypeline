@@ -4,6 +4,7 @@ import unit_tests.test_helper as th
 import config.docker_client as dc
 import os
 import docker.errors
+import logging
 
 
 """
@@ -19,7 +20,7 @@ class Image_And_Container_Test(unittest.TestCase):
     def setUpClass(cls):  # Run once for class
         """ Creates a pipeline and pulls a busybox image """
         cls.pipe = Pipeline()
-        cls.image = cls.pipe.pull('busybox')
+        cls.image = cls.pipe.pull('busybox:latest')
 
     def test_container(self):
         """ Should create a container from an image """
@@ -98,8 +99,8 @@ class TestPipeline(unittest.TestCase):
 
     def test_pull(self):
         """ Should pull an image """
-        with self.pipe.pull('busybox') as image:  # Pull image
-            self.assertTrue(th.image_exists(image.id))
+        image = self.pipe.pull('busybox:latest')  # Pull image
+        self.assertTrue(th.image_exists(image.id))
 
         try:
             image2 = self.pipe.pull('notadockerimage')  # Pull image that doesn't exist - should error.
@@ -123,4 +124,4 @@ class TestPipeline(unittest.TestCase):
 # Run unit tests when calling script
 if __name__ == "__main__":
     unittest.main()
-    print("This test requires that docker daemon is installed and running.")
+    logging.info("This test requires that docker daemon is installed and running.")
