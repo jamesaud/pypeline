@@ -1,6 +1,6 @@
 import threading
 import logging
-from .config import DOCKER_CLIENT
+from .config import DOCKER_CLIENT as cli
 
 """
 The functions in this file are wrappers over the dockerpy api, an api for communicating directly with the docker client.
@@ -18,9 +18,6 @@ References - Refer to  'https://github.com/docker/docker-py/blob/master/docs/api
 """
 
 threads = []  # Threads running. Refer to description above. IDK if this is correct.
-
-# Improve - this must be set one time in the config, not as a global variable here either.
-cli = DOCKER_CLIENT
 
 def threaded(function):
     """
