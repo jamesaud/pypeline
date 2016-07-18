@@ -35,7 +35,7 @@ class Image_And_Container_Test(unittest.TestCase):
         """ Should add a tag to an image """
         repo, tagged = 'my.repo.com/james', 'newest'
         self.image.tag(repo, tagged)
-        self.assertIn(repo + ':' + tagged, dc.find_image(self.image.id)['RepoTags'])
+        self.assertIn(repo + ':' + tagged, dc.find_image(self.image.name)['RepoTags'])
 
     def test_inside(self):
         """ Should run commands inside a container """
@@ -87,20 +87,20 @@ class TestPipeline(unittest.TestCase):
     def test_build(self):
         """ Should build an image """
         with self.pipe.build() as image:  # Build image
-            self.assertTrue(th.image_exists(image.id))
-        self.assertFalse(th.image_exists(image.id))  # Make sure image auto destroys itself
+            self.assertTrue(th.image_exists(image.name))
+        self.assertFalse(th.image_exists(image.name))  # Make sure image auto destroys itself
 
         with self.pipe.build('hello1203049') as image2:  # Build image with tag
             self.assertEqual('hello1203049', image2.name)
-            self.assertTrue(th.image_exists(image2.id))
+            self.assertTrue(th.image_exists(image2.name))
 
         with self.pipe.build(directory='.') as image3:  # Build image in build path. Needs to be more extensive.
-            self.assertTrue(th.image_exists(image3.id))
+            self.assertTrue(th.image_exists(image3.name))
 
     def test_pull(self):
         """ Should pull an image """
         image = self.pipe.pull('busybox:latest')  # Pull image
-        self.assertTrue(th.image_exists(image.id))
+        self.assertTrue(th.image_exists(image.name))
 
         try:
             image2 = self.pipe.pull('notadockerimage')  # Pull image that doesn't exist - should error.

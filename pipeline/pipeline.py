@@ -1,11 +1,10 @@
 import os
 import shutil
-
 from subprocess import call
 from uuid import uuid4
 from shutil import copy
 from .image import Image
-from config.docker_client import pull as dc_pull
+from config.docker_client import pull as dc_pull, login as dc_login
 
 class Pipeline(object):
     """
@@ -78,6 +77,14 @@ class Pipeline(object):
             copy(full_file_path, self.cloned_directory)
         except TypeError as e:
             print(e, " Are you sure you cloned from git?")
+
+    def login(self, **login):
+        """
+        Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
+        :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
+        :return: None
+        """
+        dc_login(**login)
 
     def __enter__(self):  # Implement 'with' functionality
         return self

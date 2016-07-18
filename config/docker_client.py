@@ -14,9 +14,12 @@ Problem - If you run a container, print the stdout in real time, and then exec i
 Solution - Assign background printing to a thread when the container is started.
 Notes - Don't thread any printing function. For example, threading the build function is bad because it will run
         following commands before the image is done building!
+References - Refer to  'https://github.com/docker/docker-py/blob/master/docs/api.md'  for the docker-py api
 """
 
-threads = []  # Threads running. Refer to description above.
+threads = []  # Threads running. Refer to description above. IDK if this is correct.
+
+# Improve - this must be set one time in the config, not as a global variable here either.
 cli = DOCKER_CLIENT
 
 def threaded(function):
@@ -193,18 +196,15 @@ def inside_container(container_id, args):
     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
 
-def login(**login):
+def login(**credentials):
     """
     Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
     :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
     :return: None
-    - Note - refer to https://github.com/docker/docker-py/blob/master/docs/api.md for the dockerpy api
     """
-    login_data = cli.login(**login)
-    username, registry = login_data.get('username'), login_data.get('registry')
-    response = 'Logged in'
-    if registry:
-        response += ' at registry ' + registry
-    if response:
-        response += ' with user ' + username
-    logging.info(response)
+    login_data = cli.login(**credentials)
+    status = login_data.get('Status')
+    if status is not None:
+        logging.info(status)
+    else:
+        logging.info('Failed to login. You may have logged in already, or the login credentials are invalid.')

@@ -22,7 +22,8 @@ def test():
         test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", directory="dockerstuff")
         with test_image.container('sleep 6') as container1:  # Run container with optional command. Automatically deletes container at the end of the block.
             container1.inside('echo "hello There!"')  # Run command in running container. If the container's not running, it will error!
-        test_image.tag('dockerhub.cerner.com/jamesaudretsch/myawesomeimage', 'solid')  # Tag it with a solid name
+        test_image.tag('justatest1232123/myawesomeimage', 'solid')  # Tag it with a solid name
+        pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
         test_image.push()
         #test_image.remove()  #Remove the image, if you really want.
 
@@ -40,10 +41,12 @@ def test():
 
 
     """
-    The shortest way to achieve the same results.
+    The shortest way to achieve the same results. With an example of logging in to dockerhub.com
     """
-    with Pipeline() as pipe, pipe.pull('busybox') as myImage, myImage.container('echo "rspec"'):
-        myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage", "latest").push()
+    with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.container('echo "rspec"'):
+        pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
+        myImage.tag("justatest1232123/myawesomeimage", "jusatest")  # Tag it like docker tag
+        myImage.push()
 
 
 

@@ -38,7 +38,7 @@ class Image(object):
         """Delete the image.
         :return: None
         """
-        dc.remove_image(self.id)
+        dc.remove_image(self.name)
 
     # Improve - option to push to specified registry.
     def push(self):

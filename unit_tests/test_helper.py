@@ -5,11 +5,10 @@ Helper functions for unit tests.
 """
 
 
-def image_exists(image_id):
-    try:
-        dc.find_image(image_id)
+def image_exists(image_name):
+    if dc.find_image_by_name(image_name):
         return True
-    except:
+    else:
         return False
 
 

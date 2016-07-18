@@ -18,4 +18,3 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 RAILS_DOCKERFILE_LOCATION = 'data/rails/Dockerfile'
 
 DOCKER_MACHINE_IP = '192.168.99.100'
-
