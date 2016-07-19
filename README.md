@@ -6,6 +6,7 @@ clone:
 
 install (make sure pip is installed): 
 >cd pypeline
+
 >sudo python3 setup.py install
 
 Currently, you must do the full import to run the code. Open a python3.5 file and write:
