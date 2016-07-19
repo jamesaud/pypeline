@@ -37,19 +37,6 @@ class Image_And_Container_Test(unittest.TestCase):
         self.image.tag(repo, tagged)
         self.assertIn(repo + ':' + tagged, dc.find_image(self.image.name)['RepoTags'])
 
-    def test_inside(self):
-        """ Should run commands inside a container """
-        # Exec-ing inside a running container should NOT throw an error. If it does, we know that the test failed.
-        try:
-            with self.image.container('sleep 6') as container1:  # Run container with optional command. Automatically deletes container at the end of the block.
-                container1.inside('echo "hello There!"')
-            self.assertTrue(True)
-        except:
-            self.assertTrue(False)
-        # Exec-ing inside a stopped container should give us an error. The container stops because there are no specified commands
-        with self.image.container() as container1:
-            with self.assertRaises(docker.errors.APIError):
-                container1.inside('echo "I cant exec code in a non-running container"')
 
     @classmethod
     def tearDownClass(cls):
