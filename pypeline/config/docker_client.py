@@ -132,7 +132,7 @@ def tag(image_id, repo, tagged):
 
 def create_container(image, container_name, args):
     container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
-    logging.info('Created container (did not run yet): ' + ' with commands ' + args)
+    logging.info('Created container (did not run yet) with commands: ' + args)
     return container['Id']  # Get id from dictionary
 
 
