@@ -20,6 +20,7 @@ Copy the code from 'example_pipe.py' and see how it works.
 > pipe = Pipeline()
 
 > pipe.close()
+
 - You must close the Pipeline object at the end, so preferably use 'with' instead. It will automatically close at the end of the block:
 >with Pipeline() as pipe:
 >    ...
