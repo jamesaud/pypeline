@@ -20,8 +20,8 @@ def test():
     with Pipeline() as pipe:  # Cleans up (deletes work_directory) automatically at the end of the block.
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", directory="dockerstuff")
-        with test_image.container('sleep 6') as container1:  # Run container with optional command. Automatically deletes container at the end of the block.
-            container1.inside('echo "hello There!"')  # Run command in running container. If the container's not running, it will error!
+        with test_image.container('sleep 6'):  # Run container with optional command. Automatically deletes container at the end of the block.
+            pass
         test_image.tag('justatest1232123/myawesomeimage', 'solid')  # Tag it with a solid name
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
         test_image.push()
@@ -34,8 +34,7 @@ def test():
     """
     with Pipeline() as pipe:
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
-        with pipe.build() as myImage, myImage.container('sleep 6') as container1:  #Image removes itself, container removes itself.
-            container1.inside('echo "hello There!"')
+        with pipe.build() as myImage, myImage.container('sleep 6'):  #Image removes itself, container removes itself.
             myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push()  # If you don't give it a tag, it defaults to latest
 
 
@@ -59,10 +58,10 @@ def test():
     pipe.clone('https://github.cerner.com/JA048043/docker_test')  # Clone from git
     test_image = pipe.build('myawesomeimage',)  # Build image, optional directory path as second argument.
     container1 = test_image.container('sleep 6')  # Run container with optional command
-    container1.inside('echo "hello There!"')  # Run command in running container. If the containers not running, it gives the error.
     container1.remove()  # Destroy container
     #test_image.remove() #optionally remove the image
     pipe.close() #Clean up
+
 
 
 if __name__ == "__main__":

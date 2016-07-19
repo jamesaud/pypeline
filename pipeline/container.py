@@ -17,14 +17,9 @@ class Container(object):
         if not args:  # Run an arbitrary command so docker doesn't error in some cases.
             args = 'false'
         self.__nametag__ = str(uuid4())
-        self.__id__ = dc.run_container(image_name, self.__nametag__, args)  # Equivalent to 'docker run --name name args'
+        self.__id__ = dc.create_container(image_name, self.__nametag__, args)  # Equivalent to 'docker run --name name args'
+        dc.run_container(self.__id__)
 
-
-    def inside(self, args):
-        """Execute commands inside a running container. Error if container isn't running.
-        :param args: Str - the command to run.
-        """
-        dc.inside_container(self.__id__, args)
 
     def remove(self):
         """Kill and delete the container.

@@ -17,20 +17,6 @@ Notes - Don't thread any printing function. For example, threading the build fun
 References - Refer to  'https://github.com/docker/docker-py/blob/master/docs/api.md'  for the docker-py api
 """
 
-threads = []  # Threads running. Refer to description above. IDK if this is correct.
-
-def threaded(function):
-    """
-    Decorator that threads a function of one argument
-    :param: Function - the function to wrap.
-    :return: Function - a wrapped version of the passed function that runs threaded.
-    """
-    def wrapper(arg):
-        t = threading.Thread(target=function,  args=(arg,))
-        threads.append(t)
-        t.start()
-    return wrapper
-
 
 def print_generator(generator):
     """
@@ -40,16 +26,6 @@ def print_generator(generator):
     """
     for line in generator:
         logging.info(line)
-
-
-@threaded
-def print_threaded_generator(generator):  # Description name for the thread.
-    """
-    Prints line by line from a generator, but makes it threaded.
-    :param generator: Generator - The generator to print.
-    :return: None
-    """
-    print_generator(generator)
 
 
 # Improve - should have option for registry and login credentials.
@@ -120,8 +96,7 @@ def build(dockerfile_path, image_name):
     """
     logging.info("Building image " + image_name)
     logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name)
-    for line in logs_generator:
-        logging.info(line)
+    print_generator(logs_generator)
 
 
 # Improve - should be able to give repository login credentials.
@@ -131,8 +106,7 @@ def push(image_name):
     :param push_name: the name of the image to push.
     :return: None
     """
-    for line in cli.push(image_name, stream=True):
-        logging.info(line)
+    print_generator(cli.push(image_name, stream=True))
 
 
 # Improve - use the docker api to get the actual tag of the image, not creating it with by hand. Might run into errors
@@ -152,21 +126,25 @@ def tag(image_id, repo, tagged):
     return tagged_name
 
 
-def run_container(image, container_name, args):
+def create_container(image, container_name, args):
+    container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
+    logging.info('Created container (did not run yet): ' + ' with commands ' + args)
+    return container['Id']  # Get id from dictionary
+
+
+def run_container(container_id):
     """
     Run a container from an image.
     :param image: Str - the id or name of the image to run container from.
     :param container_name: Str - the name to give the container.
     :param args: Str or List - the command to run in the container.
-    :return: Str - the id of the generated container.
+    :return: Dict - the id of the generated container.
     - Note - the output is ran through the threaded logging.info generator method.
     """
-    container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
-    container_id = container['Id']  # Get id from dictionary
     cli.start(container_id)  # Start the container
-    logging.info('Started container: ' + container_name + ' with commands: ' + "'{}'".format(args))
-    print_threaded_generator(cli.logs(container=container_id, stdout=True, stream=True))  # Output logs in real time
-    return container_id
+    logging.info('Running container: ' + container_id)
+    logs = cli.logs(container=container_id, stdout=True, stream=True)
+    print_generator(logs)
 
 
 def remove_container(container):
@@ -180,17 +158,17 @@ def remove_container(container):
     logging.info('Removed container: ' + container)
 
 
-def inside_container(container_id, args):
-    """
-    Run command inside a running container. Similar to "docker exec ..."
-    :param container_id: Str - the id of the container to run commands in
-    :param args: Str or List - commands to run inside the container.
-    :return: None
-    """
-    executor = cli.exec_create(container=container_id, cmd=args)
-    exec_id = executor['Id']
-    logging.info('Running inside container: ' + container_id + ' with commands: ' + "'{}'".format(args))
-    cli.exec_start(exec_id=exec_id, stream=True, detach=True)
+# def inside_container(container_id, args):
+#     """
+#     Run command inside a running container. Similar to "docker exec ..."
+#     :param container_id: Str - the id of the container to run commands in
+#     :param args: Str or List - commands to run inside the container.
+#     :return: Generator
+#     """
+#     executor = cli.exec_create(container=container_id, cmd=args)
+#     exec_id = executor['Id']
+#     logging.info('Running inside container: ' + container_id + ' with commands: ' + "'{}'".format(args))
+#     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
 
 def login(**credentials):
@@ -205,3 +183,5 @@ def login(**credentials):
         logging.info(status)
     else:
         logging.info('Failed to login. You may have logged in already, or the login credentials are invalid.')
+
+
