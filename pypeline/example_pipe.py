@@ -1,4 +1,4 @@
-from pypeline.pipeline import Pipeline
+from .pipeline.pipeline import Pipeline
 
 #------The good way to do this------
 def test():
@@ -20,8 +20,7 @@ def test():
     with Pipeline() as pipe:  # Cleans up (deletes work_directory) automatically at the end of the block.
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", directory="dockerstuff")
-        with test_image.container('sleep 6'):  # Run container with optional command. Automatically deletes container at the end of the block.
-            pass
+        test_image.container('sleep 6').remove()  # Run container with optional command. delete container after.
         test_image.tag('justatest1232123/myawesomeimage', 'solid')  # Tag it with a solid name
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
         test_image.push()
@@ -34,7 +33,7 @@ def test():
     """
     with Pipeline() as pipe:
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
-        with pipe.build() as myImage, myImage.container('sleep 6'):  #Image removes itself, container removes itself.
+        with pipe.build() as myImage, myImage.container('sleep 6'):  # Image removes itself, container removes itself.
             myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push()  # If you don't give it a tag, it defaults to latest
 
 
