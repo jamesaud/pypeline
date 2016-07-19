@@ -18,7 +18,7 @@ Copy the code from 'example_pipe.py' and see how it works.
 
 - Create Pipeline object:
 > pipe = Pipeline()
->...
+
 > pipe.close()
 - You must close the Pipeline object at the end, so preferably use 'with' instead. It will automatically close at the end of the block:
 >with Pipeline() as pipe:
@@ -49,7 +49,7 @@ Pull an image:
 
 - Push an image to dockerhub
 Tag an image:
->alpine_newest = alpine_image.tag('superawesomealpine', 'version2')
+>alpine_newest = alpine_image.tag('superawesomealpine', 'version1')
 
 - Login to dockerhub:
 >pipe.login(username='myName', password='secret')
