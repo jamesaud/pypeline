@@ -1,7 +1,10 @@
 import os
 import re
+import threading
 from pipeline.pipeline import Pipeline
 from config import config
+from pipeline.image import Image
+
 
 #Improve - the repository should have login credentials as a parameter option.
 class RailsPipeline(object):
@@ -32,6 +35,7 @@ class RailsPipeline(object):
         self.image = None
         self.pipe = Pipeline()
 
+
     # Improve - run threaded containers in parallel
     def test(self, *commands):
         """
@@ -39,9 +43,9 @@ class RailsPipeline(object):
         :param commands: Str - commands to run in the container.
         :return: None
         """
+        containers = []  # List of all created containers
         for command in commands:  # Or should we run all tests in the same container?
-            with self.image.container(command):  # Run each command in parallel in its own container
-                pass
+            self.image.container(command)
 
     # tags the image correctly
     def _tag(self, tag):

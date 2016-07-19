@@ -1,1 +1,0 @@
-from config import docker_client as dc
