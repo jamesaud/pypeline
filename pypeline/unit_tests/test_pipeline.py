@@ -1,10 +1,10 @@
 import os
 import unittest
 
-import config.docker_client as dc
+import pypeline.config.docker_client as dc
 
 import pypeline.unit_tests.test_helper as th
-from pypeline.pipeline import Pipeline
+from pypeline.pipeline.pipeline import Pipeline
 
 """
 This is a tricky, messy unit test because there are workspaces and docker images and containers created.
