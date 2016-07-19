@@ -13,46 +13,46 @@ install (make sure pip is installed):
 Copy the code from 'example_pipe.py' and see how it works.
 
 # Use
-Currently, you must do the full import to run the code. Open a python3.5 file and write:
+- Currently, you must do the full import to run the code. Open a python3.5 file and write:
 >from pypeline.pipeline.pipeline import Pipeline
 
-1. Create Pipeline object:
+- Create Pipeline object:
 > pipe = Pipeline()
 >...
 > pipe.close()
-- You must close the Pipeline object at the end, so preferably use 'with' instead. It will automatically close at the end of the block:
+You must close the Pipeline object at the end, so preferably use 'with' instead. It will automatically close at the end of the block:
 >with Pipeline() as pipe:
 >    ...
 
-2. Make a docker image:
-- Pull an image:
+- Make a docker image:
+Pull an image:
 >image = pipe.pull('alpine:latest')
 Delete an image:
 >image.remove()
 
-- Or, Clone and Build an image (optional path to dockerfile argument):
+Or, Clone and Build an image (optional path to dockerfile argument):
 >pipe.clone('https://github.com/jamesaud/simplest_docker')
 >image = pipe.build()
 
-- Image supports the 'with' syntax as well:
+Image supports the 'with' syntax as well:
 >with pipe.pull('alpine:latest') as alpine_image:
 >    ...
 
-3. Run a container based on an image
+- Run a container based on an image
 >container = image.container('echo "hello world!")
-- Remove a container
+Remove a container
 >container.remove()
 
-- Container supports 'with' syntax:
+Container supports 'with' syntax:
 >with alpine_image.container('echo "hello world"'):
 >    ...:
 
-4. Push an image to dockerhub
-- Tag an image:
+- Push an image to dockerhub
+Tag an image:
 >alpine_newest = alpine_image.tag('superawesomealpine', 'version2')
 
-- Login to dockerhub:
+Login to dockerhub:
 >pipe.login(username='myName', password='secret')
 
-- Push the image:
+Push the image:
 >alpine_newest.push()
