@@ -19,7 +19,7 @@ class Container(object):
         if not args:  # Run an arbitrary command so docker doesn't error in some cases.
             args = 'false'
         self.__nametag__ = str(uuid4())
-        self.__id__ = dc.create_container(image_name, self.__nametag__, args)  # Equivalent to 'docker run --name name args'
+        self.__id__ = dc.create_container(image_name, self.__nametag__, args) # Equivalent to 'docker run --name name args'
         dc.run_container(self.__id__)
 
 

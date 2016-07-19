@@ -1,6 +1,6 @@
 import threading
 import logging
-from .config import Client
+from .config import CLIENT as cli
 
 """
 The functions in this file are wrappers over the dockerpy api, an api for communicating directly with the docker client.
@@ -21,7 +21,7 @@ References - Refer to  'https://github.com/docker/docker-py/blob/master/docs/api
 def print_generator(generator, info=None):
     """
     Prints line by line from a generator, but makes it threaded.
-    :param generator: Generator - The generator to print.
+    :param generator: Generator Stream- The generator to print.
     :param info: Str - name to prepend generator output. Generally an id or name.
     :return: None
     """
@@ -39,7 +39,7 @@ def pull(image_name):
     :param image_name: Str - the name of the image to pull.
     :return: None
     """
-    generator = Client.cli.pull(image_name, stream=True)
+    generator = cli.pull(image_name, stream=True)
     print_generator(generator)
 
 
@@ -50,7 +50,7 @@ def find_image(image_id):
     :param image_id: Str - the id of the image to find.
     :return: Dict - a dictionary containing details about the image.
     """
-    return Client.cli.inspect_image(image_id)
+    return cli.inspect_image(image_id)
 
 
 def find_image_by_name(image_name):
@@ -59,7 +59,7 @@ def find_image_by_name(image_name):
     :param image_name: Str - the name of the image to search for.
     :return: List - a list containing a dictionary containing details about the image...IDK why the api works like that.
     """
-    return Client.cli.images(image_name)
+    return cli.images(image_name)
 
 
 def find_container(container_id):
@@ -68,7 +68,7 @@ def find_container(container_id):
     :param container_id: Str - the id of the container to search for.
     :return: Dict - a dictionary containing details about the container.
     """
-    return Client.cli.inspect_container(container_id)
+    return cli.inspect_container(container_id)
 
 
 def remove_image(image):
@@ -77,7 +77,7 @@ def remove_image(image):
     :param image: Str - the id or name of the image.
     :return: None
     """
-    Client.cli.remove_image(image, True)
+    cli.remove_image(image, True)
     logging.info("Removed image: " + image)
 
 
@@ -87,7 +87,7 @@ def remove_container(container):
     :param container: Str - id or name of the container.
     :return: None
     """
-    Client.cli.remove_container(container, True)
+    cli.remove_container(container, True)
     logging.info("Removed container : " + container)
 
 
@@ -99,7 +99,7 @@ def build(dockerfile_path, image_name):
     :return: None
     """
     logging.info("Building image " + image_name)
-    logs_generator = Client.cli.build(path=dockerfile_path, rm=True, tag=image_name)
+    logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name)
     print_generator(logs_generator)
 
 
@@ -110,7 +110,7 @@ def push(image_name):
     :param push_name: the name of the image to push.
     :return: None
     """
-    print_generator(Client.cli.push(image_name, stream=True))
+    print_generator(cli.push(image_name, stream=True))
 
 
 # Improve - use the docker api to get the actual tag of the image, not creating it with by hand. Might run into errors
@@ -125,13 +125,13 @@ def tag(image_id, repo, tagged):
     - Looks like "dockerhub.com/james/repo:tagged"
     """
     tagged_name = repo + ":" + tagged
-    Client.cli.tag(image_id, repo, tagged)
+    cli.tag(image_id, repo, tagged)
     logging.info('Tagged ' + image_id + " " + tagged)
     return tagged_name
 
 
 def create_container(image, container_name, args):
-    container = Client.cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
+    container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
     logging.info('Created container (did not run yet) with commands: ' + args)
     return container['Id']  # Get id from dictionary
 
@@ -145,9 +145,9 @@ def run_container(container_id):
     :return: Dict - the id of the generated container.
     - Note - the output is ran through the threaded logging.info generator method.
     """
-    Client.cli.start(container_id)  # Start the container
+    cli.start(container_id)  # Start the container
     logging.info('Running container: ' + container_id)
-    logs = Client.cli.logs(container=container_id, stdout=True, stream=True)
+    logs = cli.logs(container=container_id, stdout=True, stream=True)
     print_generator(logs, container_id)
 
 
@@ -157,8 +157,8 @@ def remove_container(container):
     :param container: Str - id or name of container to remove.
     :return: None
     """
-    Client.cli.stop(container=container)
-    Client.cli.remove_container(container=container, v=True) # v=True means force remove
+    cli.stop(container=container)
+    cli.remove_container(container=container, v=True) # v=True means force remove
     logging.info('Removed container: ' + container)
 
 
@@ -169,10 +169,10 @@ def remove_container(container):
 #     :param args: Str or List - commands to run inside the container.
 #     :return: Generator
 #     """
-#     executor = Client.cli.exec_create(container=container_id, cmd=args)
+#     executor = cli.exec_create(container=container_id, cmd=args)
 #     exec_id = executor['Id']
 #     logging.info('Running inside container: ' + container_id + ' with commands: ' + "'{}'".format(args))
-#     Client.cli.exec_start(exec_id=exec_id, stream=True, detach=True)
+#     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
 
 def login(**credentials):
@@ -181,7 +181,7 @@ def login(**credentials):
     :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
     :return: None
     """
-    login_data = Client.cli.login(**credentials)
+    login_data = cli.login(**credentials)
     status = login_data.get('Status')
     if status is not None:
         logging.info(status)

@@ -1,4 +1,4 @@
-from .config import Client, set_logger
+from .config import setup, set_logger
 
-Client.setup()
+setup()
 set_logger()
