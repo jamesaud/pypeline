@@ -1,11 +1,17 @@
 # pypeline
 a docker pipeline in python - clone from git, build docker image, run tests in docker containers, push to docker repo.
 
-I've written many but not all the tests yet. There is still a lot to be done.
+clone: 
+>git clone https://github.cerner.com/JA048043/pypeline
 
-Clone the repository, and run 'example_pipe.py' or 'example_rails.py' to see how it works. 
+install (make sure pip is installed): 
+>cd pypeline
 
-example_pipe - the generic version of a pipeline that you can build, with several example use cases.
+>sudo python3 setup.py install
 
-example_rails - a specialized verison build for rails apps. The goal is to not require developers to have a Dockerfile in their project. Expands using the workflow/rails module.
+Currently, you must do the full import to run the code. Open a python3.5 file and write:
+>from pypeline.pipeline.pipeline import Pipeline
+
+Copy the code from 'example_pipe.py' and see how it works.
+                               
 
