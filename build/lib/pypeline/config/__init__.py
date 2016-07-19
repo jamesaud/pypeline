@@ -1,4 +1,4 @@
+from .config import Client, set_logger
 
-from pypeline.config.config import setup
-
-setup()
+Client.setup()
+set_logger()
