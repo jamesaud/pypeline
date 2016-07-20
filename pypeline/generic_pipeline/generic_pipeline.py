@@ -70,15 +70,16 @@ class GenericPipeline(object):
         """
         self.pipe.clone(git_url)
 
-    def build(self, git_url, dockerfile_dir='.'):
+    def build(self, git_url, dockerfile_dir='.', dockerfile_name='Dockerfile'):
         """
         Build image from the cloned repository using the self-provided dockerfile.
+        :param dockerfile_path: Relative path to the dockerfile, including the name
         :return: None
         """
         self.git_url = git_url
         self.dockerfile_dir = dockerfile_dir
         self._clone(git_url)
-        self.image = self.pipe.build(directory=self.dockerfile_dir)
+        self.image = self.pipe.build(path=self.dockerfile_dir, dockerfile=dockerfile_name)
 
     def push(self, tag='latest'):
         """
@@ -104,6 +105,7 @@ class GenericPipeline(object):
 
         if repository is None:  # Set repository the same as the git account.
             repository = username
+
         self.repository = _remove_trailing_slash(repository)
         self.registry = _add_trailing_slash(registry)
         self.pipe.login(username=username, password=password, registry=registry)

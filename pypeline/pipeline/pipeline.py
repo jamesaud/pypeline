@@ -33,17 +33,14 @@ class Pipeline(object):
         call(['git', 'clone', git_url, git_workspace])  # Clone in a unique directory.
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)  # Path looks like 'work_directory/git_directory'
 
-    def build(self, image_tag=str(uuid4()), **directory):
+    def build(self, image_tag=str(uuid4()), path='.', dockerfile='Dockerfile'):
         """Build image in cloned directory, or user specified path relative to the cloned directory.
         :param image_tag: Str - the docker name to give the image. Creates a name if not given.
         :param directory: Str - the directory path relative to the cloned directory. Defaults to '.', the top level.
         :return: Image
         """
-        dockerDir = directory.get('directory')  # dict.get(value) can return None, dict[value] will raise an error.
-        if not dockerDir:  # Check if optional directory argument was passed.
-            dockerDir = '.'  # Default path the docker file is at.
-        path_to_dockerfile = os.path.join(self.cloned_directory, dockerDir)  # Full path to the dockerfile
-        return Image(image_tag, True, path_to_dockerfile)  # Build = True.
+        path_to_dockerfile = os.path.join(self.cloned_directory, path)  # Full path to the dockerfile
+        return Image(image_tag, build=True, path=path_to_dockerfile, dockerfile=dockerfile)  # Build = True.
 
     @classmethod
     def pull(self, image_tag):

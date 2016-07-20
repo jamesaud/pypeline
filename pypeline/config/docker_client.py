@@ -91,7 +91,7 @@ def remove_container(container):
     logging.info("Removed container : " + container)
 
 
-def build(dockerfile_path, image_name):
+def build(dockerfile_path, image_name, dockerfile=None):
     """
     Build image from dockerfile in specified path.
     :param dockerfile_path: Str - full path of the dockerfile.
@@ -99,7 +99,7 @@ def build(dockerfile_path, image_name):
     :return: None
     """
     logging.info("Building image " + image_name)
-    logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name)
+    logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name, dockerfile=dockerfile)
     print_generator(logs_generator)
 
 

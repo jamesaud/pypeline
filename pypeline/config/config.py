@@ -12,7 +12,7 @@ CLIENT = None
 DEFAULT_REGISTRY = 'https://index.docker.io/v1/'
 
 
-def set_logger():
+def _set_logger():
     # Set the logger to log info to stdout
     logging.basicConfig(level=logging.INFO, format='%(message)s')
 

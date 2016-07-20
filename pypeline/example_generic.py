@@ -1,4 +1,4 @@
-from pypeline.generic_pipeline.generic_pipeline import GenericPipeline
+from pypeline.generic_pipeline import GenericPipeline
 
 
 """
@@ -18,12 +18,12 @@ def test():
     """
     with GenericPipeline() as GP:
         stage('Clone and Build')
-        GP.build('https://github.com/jamesaud/simplest_docker')
+        GP.build('https://github.com/jamesaud/simplest_docker')  # Optional dockerfile directory and dockerfile name
         stage("Test")
-        GP.test('echo "first test"', 'echo "second test"','echo "third test"')  # Run parallel commands in separate containers
+        GP.test('echo "first test"', 'echo "second test"', 'echo "third test"')  # Run parallel commands in separate containers
         stage("Push")
         GP.login(username='justatest1232123', password='Justatest123')  # Optional registry argument
-        GP.push('latest')  # Tag before it pushes, defaults to latest with no argument
+        GP.push()  # Tag before it pushes, defaults to latest with no argument
 
 
 def test2():

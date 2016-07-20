@@ -8,7 +8,7 @@ class Image(object):
     An Image represents a docker image. It carries relevant information in order to access the image with the docker api
     and methods for interacting with a docker image.
     """
-    def __init__(self, image_tag, build=False, path=None):
+    def __init__(self, image_tag, build=False, path=None, dockerfile=None):
         """Initialize the image and build the docker image if specified. Image captures a docker image's essential data.
         :param image_tag: Str - the name to give the image.
         :param build: Bool - True to build from the specified dockerfile path.
@@ -19,7 +19,7 @@ class Image(object):
         if build:
             if not path:  # If build is True, there must be a specified path
                 raise TypeError("You must specify a path!")
-            dc.build(path, image_tag)  # Build docker image from the specified directory
+            dc.build(path, image_tag, dockerfile=dockerfile)  # Build docker image from the specified directory
         self.__nametag__ = image_tag
         data = dc.find_image_by_name(self.__nametag__)  # Dictionary with related information of the image
         if not data:

@@ -1,4 +1,4 @@
-from .config import setup, set_logger
+from .config import setup, _set_logger
 
 setup()
-set_logger()
+_set_logger()

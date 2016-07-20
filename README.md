@@ -18,8 +18,8 @@ Look at the example in the pypeline folder. Is the most straightforward way to b
 # Pipeline Use
 Look at the example in the pypeline folder. Is capable of doing more advanced pipelines.
 
-- Currently, you must do the full import to run the code. Open a python3.5 file and write:
->from pypeline.pipeline.pipeline import Pipeline
+- Open a python3.5 file and write:
+>from pypeline.pipeline import Pipeline
 
 - Create Pipeline object:
 > pipe = Pipeline()

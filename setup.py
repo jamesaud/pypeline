@@ -8,5 +8,5 @@ setup(name='pypeline',
       author='james audretsch',
       author_email='',
       url='',
-      packages={'pypeline', 'pypeline/pipeline', 'pypeline/config',},
+      packages={'pypeline', 'pypeline/pipeline', 'pypeline/config', 'pypeline/generic_pipeline'},
      )

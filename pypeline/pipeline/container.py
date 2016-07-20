@@ -11,7 +11,7 @@ class Container(object):
     # Improve - self.__nametag__ and self.__id__ should be private properties.
     def __init__(self, image_name, args=''):
         """Initializes the container object with the corresponding docker container details.
-        :param image_id: Str - the id of the image to build the container from.
+        :param image_name: Str - the name of the image to build the container from.
         :param args: Str - the command to run in the docker container.
         :attribute name: Str - the name of the docker container.
         :attribute id: Str - the id of the docker container.
