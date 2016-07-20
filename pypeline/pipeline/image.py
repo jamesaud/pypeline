@@ -54,7 +54,7 @@ class Image(object):
         :return: self
         - The image name will now be repo:tag, eg. self.__nametag__ = 'dockerhub.com/james/myrepo:coolv2'
         """
-        self.__nametag__ = dc.tag(self.__id__, repo, tagged)
+        self.__nametag__ = dc.tag(self.__nametag__, repo, tagged)
         return self
 
     @property

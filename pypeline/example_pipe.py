@@ -1,4 +1,4 @@
-from .pipeline.pipeline import Pipeline
+from pipeline.pipeline import Pipeline
 
 #------The good way to do this------
 def test():

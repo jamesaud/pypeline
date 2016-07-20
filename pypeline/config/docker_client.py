@@ -115,7 +115,7 @@ def push(image_name):
 
 # Improve - use the docker api to get the actual tag of the image, not creating it with by hand. Might run into errors
 #           where it is not the same as the actual name.
-def tag(image_id, repo, tagged):
+def tag(image_name, repo, tagged):
     """
     Re-Tag an image. Same as 'docker tag image tagName'
     :param image_id:
@@ -125,12 +125,19 @@ def tag(image_id, repo, tagged):
     - Looks like "dockerhub.com/james/repo:tagged"
     """
     tagged_name = repo + ":" + tagged
-    cli.tag(image_id, repo, tagged)
-    logging.info('Tagged ' + image_id + " " + tagged)
+    cli.tag(image_name, repo, tagged)
+    logging.info('Tagged ' + tagged_name)
     return tagged_name
 
 
 def create_container(image, container_name, args):
+    """
+    Creates a container but does not run it.
+    :param image: Str - name or id of image to build
+    :param container_name: Str - name to give container
+    :param args: Str - commands to give container
+    :return: Str - id of the container
+    """
     container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
     logging.info('Created container (did not run yet) with commands: ' + args)
     return container['Id']  # Get id from dictionary
@@ -158,7 +165,7 @@ def remove_container(container):
     :return: None
     """
     cli.stop(container=container)
-    cli.remove_container(container=container, v=True) # v=True means force remove
+    cli.remove_container(container=container, v=True)  # v=True means force remove
     logging.info('Removed container: ' + container)
 
 
