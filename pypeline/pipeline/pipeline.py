@@ -77,13 +77,13 @@ class Pipeline(object):
             print(e, " Are you sure you cloned from git?")
 
     @classmethod
-    def login(self, username, password):
+    def login(self, username=None, password=None, registry=None):
         """
         Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
         :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
         :return: None
         """
-        dc_login(username=username, password=password)
+        dc_login(username=username, password=password, registry=registry)
 
     def __enter__(self):  # Implement 'with' functionality
         return self

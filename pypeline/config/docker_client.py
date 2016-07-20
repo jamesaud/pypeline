@@ -122,7 +122,7 @@ def tag(image_name, repo, tagged):
     :param repo:
     :param tag:
     :return: Str - the name of the tagged image.
-    - Looks like "dockerhub.com/james/repo:tagged"
+    - Looks like "myimage:tagged"
     """
     tagged_name = repo + ":" + tagged
     cli.tag(image_name, repo, tagged)
@@ -182,13 +182,13 @@ def remove_container(container):
 #     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
 
-def login(**credentials):
+def login(username=None, password=None, registry=None):
     """
     Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
     :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
     :return: None
     """
-    login_data = cli.login(**credentials)
+    login_data = cli.login(username=username, password=password, registry=registry)
     status = login_data.get('Status')
     if status is not None:
         logging.info(status)
