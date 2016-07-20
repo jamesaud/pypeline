@@ -9,6 +9,7 @@ Set configuration in init.py.
 
 DOCKER_MACHINE_IP = None
 CLIENT = None
+DEFAULT_REGISTRY = 'https://index.docker.io/v1/'
 
 
 def set_logger():
