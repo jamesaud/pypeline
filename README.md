@@ -12,7 +12,12 @@ install (make sure pip is installed):
 
 Copy the code from 'example_pipe.py' and see how it works.
 
-# Use
+# GenericPipeline Use
+Look at the example in the pypeline folder. Is the most straightforward way to build, test, and run from a git project.
+
+# Pipeline Use
+Look at the example in the pypeline folder. Is capable of doing more advanced pipelines.
+
 - Currently, you must do the full import to run the code. Open a python3.5 file and write:
 >from pypeline.pipeline.pipeline import Pipeline
 
