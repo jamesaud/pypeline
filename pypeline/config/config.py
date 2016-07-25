@@ -9,11 +9,11 @@ Set configuration in init.py.
 
 CLIENT = None
 DEFAULT_REGISTRY = 'https://index.docker.io/v1/'
-
+LOGGING_LEVEL = logging.INFO
 
 def _set_logger():
     # Set the logger to log info to stdout
-    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logging.basicConfig(level=LOGGING_LEVEL, format='%(message)s')
 
 
 def setup(DOCKER_BASE_URL='https://192.168.99.100:2376',

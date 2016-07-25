@@ -65,13 +65,13 @@ class TestPipeline(unittest.TestCase):
         """ Verify clone from git from setUpClass() """
         self.assertTrue(os.path.isdir(self.pipe.cloned_directory))
 
-    def test_copyToClonedDirectory(self):
+    def test_copy_to_cloned_directory(self):
         """ Should copy a file to the cloned directory """
         filename = 'test23432.txt'
         with open(filename, 'w')as test_file:
             test_file.write('....')
         file_path = os.path.join(os.getcwd(), filename)
-        self.pipe.copyToClonedDirectory(file_path)
+        self.pipe.copy_to_cloned_directory(file_path)
         self.assertTrue(filename in os.listdir(self.pipe.cloned_directory))
         os.remove(file_path)
 

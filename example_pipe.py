@@ -67,7 +67,7 @@ def test():
     """
     with Pipeline() as pipe:
         img = pipe.pull('busybox:latest')
-        # Takes containers as arguments.
+        # Takes commands as arguments, and runs each comma separated one in a separate container.
         img.run_parallel_containers('echo "rspec spec"', 'echo "hello world"')
 
 

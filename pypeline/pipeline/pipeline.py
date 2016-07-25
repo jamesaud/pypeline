@@ -13,7 +13,8 @@ class Pipeline(object):
     The pipeline process is: clone from Git, build image, run containers, push image to repository.
     """
     def __init__(self):
-        """Initialize class, create work directory and chdir into it.
+        """
+        Initialize class, create work directory and chdir into it.
         :attribute self.work_directory: Str - The full path of the work directory.
         :attribute self.cloned_directory: Str -The full path of the github cloned directory.
         """
@@ -24,7 +25,8 @@ class Pipeline(object):
         self.work_directory = os.path.abspath('.')  # Save as full path
 
     def clone(self, git_url):
-        """Clones code from Github.
+        """
+        Clones code from Github.
         :param git_url: Str - the url to clone from
         :return: None
         """
@@ -33,7 +35,8 @@ class Pipeline(object):
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)  # Path looks like 'work_directory/git_directory'
 
     def build(self, image_tag=str(uuid4()), path='.', dockerfile='Dockerfile'):
-        """Build image in cloned directory, or user specified path relative to the cloned directory.
+        """
+        Build image in cloned directory, or user specified path relative to the cloned directory.
         :param image_tag: Str - the docker name to give the image. Creates a name if not given.
         :param directory: Str - the directory path relative to the cloned directory. Defaults to '.', the top level.
         :return: Image
@@ -43,7 +46,8 @@ class Pipeline(object):
 
     @classmethod
     def pull(self, image_tag):
-        """Pull docker image from dockerhub.
+        """
+        Pull docker image from dockerhub.
         :param image_tag: Str - the docker image to pull.
         :return: Image
         """
@@ -51,7 +55,8 @@ class Pipeline(object):
         return Image(image_tag)
 
     def close(self):
-        """Delete the work directory.
+        """
+        Delete the work directory.
         :return: None
         """
         try:
@@ -61,7 +66,7 @@ class Pipeline(object):
         except OSError as e:
             print(e, "The pipeline tried and failed to delete directory at ", self.work_directory)
 
-    def copyToClonedDirectory(self, full_file_path):
+    def copy_to_cloned_directory(self, full_file_path):
         """
         Copy a file into the cloned directory.
         :param full_file_path: Str - the full path of the file to copy.
@@ -76,7 +81,9 @@ class Pipeline(object):
     def login(self, username=None, password=None, registry=None):
         """
         Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
-        :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
+        :param username: Str - the username to the account.
+        :param password: Str - the password to the account.
+        :param registry: Str - the registry to upload to. Not required if using dockerhub.
         :return: None
         """
         DockerClient.login(username=username, password=password, registry=registry)
