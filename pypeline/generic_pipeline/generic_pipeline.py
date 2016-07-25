@@ -54,21 +54,8 @@ class GenericPipeline(object):
         - Note - Runs multiple threads to run concurrent containers and generate live output.
         :return: None
         """
-        containers = []  # list of containers being executed
-        for command in commands:  # Or should we run all tests in the same container?
-            container = self.image.container(args=command, run_now=False)
-            containers.append(container)
-            container.run()
-        """
+        self.image.run_parallel_containers(*commands)  # list of commands being executed
 
-        NEW MulTIPROCESSING CODE GOES HERE
-
-        """
-        # Improve - the main function won't stop if a thread errors.
-        #
-        print('deleteting containers!')
-        for container in containers:  # Delete container after running them.
-            container.remove()
 
     def _clone(self, git_url):
         """

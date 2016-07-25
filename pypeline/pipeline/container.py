@@ -9,7 +9,7 @@ class Container(object):
     the docker api and methods for interacting with a docker container.
     """
     # Improve - self.__nametag__ and self.__id__ should be private properties.
-    def __init__(self, image_name, args=''):
+    def __init__(self, image_name, args='', container_name=None):
         """Initializes the container object with the corresponding docker container details.
         :param image_name: Str - the name of the image to build the container from.
         :param args: Str - the command to run in the docker container.
@@ -18,7 +18,7 @@ class Container(object):
         """
         if not args:  # Run an arbitrary command so docker doesn't error in some cases.
             args = 'false'
-        self.__nametag__ = str(uuid4())
+        self.__nametag__ = container_name or str(uuid4())
         self.__id__ = self._create(image_name, self.__nametag__, args)
 
 

@@ -33,7 +33,7 @@ def test():
     """
     with Pipeline() as pipe:
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
-        with pipe.build() as myImage, myImage.container('sleep 6'):  # Image removes itself, container removes itself.
+        with pipe.build() as myImage, myImage.run_container('sleep 6'):  # Image removes itself, container removes itself.
             myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push()  # If you don't give it a tag, it defaults to latest
 
 
@@ -42,7 +42,7 @@ def test():
     The shortest way to achieve the same results.
     With an example of logging in to dockerhub.com
     """
-    with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.container('echo "rspec"'):
+    with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.run_container('echo "rspec"'):
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
         myImage.tag("justatest1232123/myawesomeimage", "jusatest").push()
 
@@ -56,11 +56,19 @@ def test():
     test_image.remove()
     pipe.clone('https://github.cerner.com/JA048043/docker_test')  # Clone from git
     test_image = pipe.build('myawesomeimage',)  # Build image, optional directory path as second argument.
-    container1 = test_image.container('sleep 6')  # Run container with optional command
+    container1 = test_image.container('sleep 6')  # Create container with optional command
+    container1.run()  # Run container
     container1.remove()  # Destroy container
     #test_image.remove() #optionally remove the image
     pipe.close() #Clean up
 
+    """
+    Run containers in parallel.
+    """
+    with Pipeline() as pipe:
+        img = pipe.pull('busybox:latest')
+        # Takes containers as arguments.
+        img.run_parallel_containers('echo "rspec spec"', 'echo "hello world"')
 
 
 if __name__ == "__main__":

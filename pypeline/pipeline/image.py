@@ -1,3 +1,4 @@
+from .threaded import Parallel
 from pypeline.config.docker_client import DockerClient as dc
 from .container import Container
 
@@ -27,29 +28,28 @@ class Image(object):
                             image_tag, "but didn't find anything.")
         self.__id__ = data[0]['Id'].split('sha256:')[-1]  # Get the unique ID number only
 
-    def container(self, args='', run_now=True):
+    def container(self, args='', name=None):
+        """Create  a container with given commands.
+        :param args: String - the commands to run in a docker container.
+        :return: Container
+        """
+        container = Container(self.__id__, args)  # Random unique container name.
+        return container
+
+    def run_container(self, args='', name=None):
         """Create and run a container with given commands.
         :param args: String - the commands to run in a docker container.
         :return: Container
         """
         container = Container(self.__id__, args)  # Random unique container name.
-        if run_now:
-            container.run()
+        container.run()
         return container
 
-    """
-    NEW CODE FOR MULTI CONTAINER PARLELL RUNNING
-    Change the above container function to just return a container without running it.
-    Write a run_container function to do what container function currently does.
-    Call parallel_containe like image.run_parallel_containers(image.container('rpec spec'), image.container('rspec spec'))
-    figure out how to multithread it.
-    """
-
-    def run_parallel_containers(self, *args):
-        # for container in args:
-            # Multithread:
-            # container.run()
-        pass
+    def run_parallel_containers(self, *commands):
+        parallel = Parallel()
+        for command in commands:
+            parallel.add(self.container(command).run)
+        parallel.run()
 
     def remove(self):
         """Delete the image.

@@ -36,14 +36,16 @@ def test2():
     Alternative syntax. If you forget to close, the git cloned work directory will be left in your current directory.
     """
     RP = GenericPipeline()
-    RP.login(registry='dockerhub.cerner.com/', repository='jamesaudretsch')
-    stage("Clone and Build")
-    RP.build('https://github.cerner.com/JA048043/r_wellness')
-    stage("Test")
-    RP.test('rspec spec', 'rspec spec', 'break')  # Run parallel tests in separate containers
-    stage("Push")
-    RP.push('latest')
-    RP.close()
+    try:
+        RP.login(registry='dockerhub.cerner.com/', repository='jamesaudretsch')
+        stage("Clone and Build")
+        RP.build('https://github.cerner.com/JA048043/r_wellness')
+        stage("Test")
+        RP.test('rspec spec', 'rspec spec', 'break')  # Run parallel tests in separate containers
+        stage("Push")
+        RP.push('latest')
+    finally:
+        RP.close()
 
 
 if __name__ == "__main__":

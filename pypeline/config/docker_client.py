@@ -1,4 +1,4 @@
-import docker.Client
+import docker
 import logging
 from .config import CLIENT as cli
 
@@ -18,10 +18,10 @@ References - Refer to  'https://github.com/docker/docker-py/blob/master/docs/api
 """
 
 
-class DockerClient(docker.Client):
+class DockerClient:
 
-    @staticmethod
-    def print_generator(generator, info=None):
+    @classmethod
+    def print_generator(cls, generator, info=None):
         """
         Prints line by line from a generator, but makes it threaded.
         :param generator: Generator Stream- The generator to print.
@@ -36,20 +36,20 @@ class DockerClient(docker.Client):
 
 
     # Improve - should have option for registry and login credentials.
-    @staticmethod
-    def pull(image_name):
+    @classmethod
+    def pull(cls, image_name):
         """
         Pull image from registry, defaults to dockerhub.com.
         :param image_name: Str - the name of the image to pull.
         :return: None
         """
         generator = cli.pull(image_name, stream=True)
-        DockerClient.print_generator(generator)
+        cls.print_generator(generator)
 
 
     # Find by image id
-    @staticmethod
-    def find_image(image_id):
+    @classmethod
+    def find_image(cls, image_id):
         """
         Find image by id.
         :param image_id: Str - the id of the image to find.
@@ -57,8 +57,8 @@ class DockerClient(docker.Client):
         """
         return cli.inspect_image(image_id)
 
-    @staticmethod
-    def find_image_by_name(image_name):
+    @classmethod
+    def find_image_by_name(cls, image_name):
         """
         Find image by name.
         :param image_name: Str - the name of the image to search for.
@@ -66,8 +66,8 @@ class DockerClient(docker.Client):
         """
         return cli.images(image_name)
 
-    @staticmethod
-    def find_container(container_id):
+    @classmethod
+    def find_container(cls, container_id):
         """
         Find the container by id.
         :param container_id: Str - the id of the container to search for.
@@ -75,8 +75,8 @@ class DockerClient(docker.Client):
         """
         return cli.inspect_container(container_id)
 
-    @staticmethod
-    def remove_image(image):
+    @classmethod
+    def remove_image(cls, image):
         """
         Remove the image.
         :param image: Str - the id or name of the image.
@@ -85,8 +85,8 @@ class DockerClient(docker.Client):
         cli.remove_image(image, True)
         logging.info("Removed image: " + image)
 
-    @staticmethod
-    def remove_container(container):
+    @classmethod
+    def remove_container(cls, container):
         """
         Kill and delete the container
         :param container: Str - id or name of the container.
@@ -95,8 +95,8 @@ class DockerClient(docker.Client):
         cli.remove_container(container, True)
         logging.info("Removed container : " + container)
 
-    @staticmethod
-    def build(dockerfile_path, image_name, dockerfile=None):
+    @classmethod
+    def build(cls, dockerfile_path, image_name, dockerfile=None):
         """
         Build image from dockerfile in specified path.
         :param dockerfile_path: Str - full path of the dockerfile.
@@ -105,24 +105,24 @@ class DockerClient(docker.Client):
         """
         logging.info("Building image " + image_name)
         logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name, dockerfile=dockerfile)
-        DockerClient.print_generator(logs_generator)
+        cls.print_generator(logs_generator)
 
 
     # Improve - should be able to give repository login credentials.
-    @staticmethod
-    def push(image_name):
+    @classmethod
+    def push(cls, image_name):
         """
         Push image to repository.
         :param push_name: the name of the image to push.
         :return: None
         """
-        DockerClient.print_generator(cli.push(image_name, stream=True))
+        cls.print_generator(cli.push(image_name, stream=True))
 
 
     # Improve - use the docker api to get the actual tag of the image, not creating it with by hand. Might run into errors
     #           where it is not the same as the actual name.
-    @staticmethod
-    def tag(image_name, repo, tagged):
+    @classmethod
+    def tag(cls, image_name, repo, tagged):
         """
         Re-Tag an image. Same as 'docker tag image tagName'
         :param image_id:
@@ -136,8 +136,8 @@ class DockerClient(docker.Client):
         logging.info('Tagged ' + tagged_name)
         return tagged_name
 
-    @staticmethod
-    def create_container(image, container_name, args):
+    @classmethod
+    def create_container(cls, image, container_name, args):
         """
         Creates a container but does not run it.
         :param image: Str - name or id of image to build
@@ -149,8 +149,8 @@ class DockerClient(docker.Client):
         logging.info('Created container (did not run yet) with commands: ' + args)
         return container['Id']  # Get id from dictionary
 
-    @staticmethod
-    def run_container(container_id):
+    @classmethod
+    def run_container(cls, container_id):
         """
         Run a container from an image.
         :param image: Str - the id or name of the image to run container from.
@@ -162,10 +162,10 @@ class DockerClient(docker.Client):
         cli.start(container_id)  # Start the container
         logging.info('Running container: ' + container_id)
         logs = cli.logs(container=container_id, stdout=True, stream=True)
-        DockerClient.print_generator(logs, container_id)
+        cls.print_generator(logs, container_id)
 
-    @staticmethod
-    def remove_container(container):
+    @classmethod
+    def remove_container(cls, container):
         """
         Kill and delete a container.
         :param container: Str - id or name of container to remove.
@@ -188,8 +188,8 @@ class DockerClient(docker.Client):
     #     logging.info('Running inside container: ' + container_id + ' with commands: ' + "'{}'".format(args))
     #     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
-    @staticmethod
-    def login(username=None, password=None, registry=None):
+    @classmethod
+    def login(cls, username=None, password=None, registry=None):
         """
         Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
         :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}

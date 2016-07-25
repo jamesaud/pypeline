@@ -21,14 +21,19 @@ class Image_And_Container_Test(unittest.TestCase):
         cls.pipe = Pipeline()
         cls.image = cls.pipe.pull('busybox:latest')
 
-    def test_container(self):
+    def test_run_container(self):
         """ Should create a container from an image """
-        with self.image.container() as container1:
+        with self.image.run_container() as container1:
             cont1_id = container1.id
             self.assertTrue(th.container_exists(container1.id))  # Assert it exists
         self.assertFalse(th.container_exists(cont1_id))  # Assert it is automatically destroyed
-        with self.image.container('echo "hello world"') as container2:  # This should run in the container, I don't know how to verify it.
+        with self.image.run_container('echo "hello world"') as container2:  # This should run in the container, I don't know how to verify it.
             self.assertTrue(th.container_exists(container2.id))
+
+    def test_create_container(self):
+        with self.image.container('echo "hello"') as container1:
+            container1.run()
+            self.assertTrue(th.container_exists(container1.id))
 
     def test_tag(self):
         """ Should add a tag to an image """
