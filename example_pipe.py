@@ -42,7 +42,7 @@ def test():
     The shortest way to achieve the same results.
     With an example of logging in to dockerhub.com
     """
-    with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.run_container('echo "rspec"'):
+    with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.run_container(args='echo "rspec"'):
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
         myImage.tag("justatest1232123/myawesomeimage", "jusatest").push()
 
@@ -56,7 +56,7 @@ def test():
     test_image.remove()
     pipe.clone('https://github.cerner.com/JA048043/docker_test')  # Clone from git
     test_image = pipe.build('myawesomeimage',)  # Build image, optional directory path as second argument.
-    container1 = test_image.container('sleep 6')  # Create container with optional command
+    container1 = test_image.container(args='sleep 6', name='myawesomecontainer')  # Create container, optional name
     container1.run()  # Run container
     container1.remove()  # Destroy container
     #test_image.remove() #optionally remove the image

@@ -33,7 +33,7 @@ class Image(object):
         :param args: String - the commands to run in a docker container.
         :return: Container
         """
-        container = Container(self.__id__, args)  # Random unique container name.
+        container = Container(self.__id__, args, name)  # Random unique container name.
         return container
 
     def run_container(self, args='', name=None):
@@ -41,7 +41,7 @@ class Image(object):
         :param args: String - the commands to run in a docker container.
         :return: Container
         """
-        container = Container(self.__id__, args)  # Random unique container name.
+        container = Container(self.__id__, args, name)  # Random unique container name.
         container.run()
         return container
 

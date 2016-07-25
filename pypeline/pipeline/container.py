@@ -23,7 +23,8 @@ class Container(object):
 
 
     def remove(self):
-        """Kill and delete the container.
+        """
+        Kill and delete the container.
         :return: None
         """
         dc.remove_container(self.__id__)
