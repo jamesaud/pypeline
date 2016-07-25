@@ -13,12 +13,12 @@ def stage(name):
 
 
 def tag_with_time():
-    return datetime.now().utcnow().strftime('%Y-%m-%d--%Hh%Mm%Ss')
+    return datetime.now().utcnow().strftime('%Y-%m-%d--%Hh%Mm%SsUTC')
 
 
 def test():
     """
-    Using an alpine image. 'with' syntax preferred.
+    Using an alpine image.
     """
     with GenericPipeline() as GP:
         stage('Clone and Build')
@@ -41,10 +41,10 @@ def test2():
         stage("Clone and Build")
         RP.build('https://github.cerner.com/JA048043/r_wellness')
         stage("Test")
-        RP.test('rspec spec', 'rspec spec', 'break')  # Run parallel tests in separate containers
+        RP.test('rspec spec', 'rspec spec', 'echo "third test"')  # Run parallel tests in separate containers
         stage("Push")
         RP.push('latest')
-    finally:
+    finally:  # Make sure to cleanup on an error. 'with' syntax is preferred.
         RP.close()
 
 

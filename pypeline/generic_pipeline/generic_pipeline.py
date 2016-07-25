@@ -72,9 +72,9 @@ class GenericPipeline(object):
         :return: None
         """
         self.git_url = git_url
-        self.dockerfile_dir = dockerfile_dir
         self._clone(git_url)
-        self.image = self.pipe.build(path=self.dockerfile_dir, dockerfile=dockerfile_name)
+        self.dockerfile_dir = dockerfile_dir
+        self.image = self.pipe.build(path=dockerfile_dir, dockerfile=dockerfile_name)
 
     def push(self, tag='latest'):
         """
