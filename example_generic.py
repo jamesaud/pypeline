@@ -1,5 +1,5 @@
 from pypeline.generic_pipeline import GenericPipeline
-
+from datetime import datetime
 
 """
 Examples of using the GenericPipeline.
@@ -12,9 +12,13 @@ def stage(name):
     print("\n----- {} -----\n".format(name) + "-" * 27 + "\n")
 
 
+def tag_with_time():
+    return datetime.now().utcnow().strftime('%Y-%m-%d--%Hh%Mm%Ss')
+
+
 def test():
     """
-    Using an alpine image.
+    Using an alpine image. 'with' syntax preferred.
     """
     with GenericPipeline() as GP:
         stage('Clone and Build')
@@ -23,21 +27,22 @@ def test():
         GP.test('echo "first test"', 'echo "second test"', 'echo "third test"')  # Run parallel commands in separate containers
         stage("Push")
         GP.login(username='justatest1232123', password='Justatest123')  # Optional registry argument
-        GP.push()  # Tag before it pushes, defaults to latest with no argument
+        GP.push(tag_with_time())  # Tag before it pushes, defaults to latest with no argument
 
 
 def test2():
     """
     Using a rails app.
+    Alternative syntax. If you forget to close, the git cloned work directory will be left in your current directory.
     """
     RP = GenericPipeline()
-    RP.login(registry='dockerhub.cerner.com/', repository='jamesaudretsch/')
+    RP.login(registry='dockerhub.cerner.com/', repository='jamesaudretsch')
     stage("Clone and Build")
     RP.build('https://github.cerner.com/JA048043/r_wellness')
     stage("Test")
-    RP.test('rspec spec', 'rspec spec', 'echo "third test"')  # Run parallel tests in separate containers
+    RP.test('rspec spec', 'rspec spec', 'break')  # Run parallel tests in separate containers
     stage("Push")
-    RP.push('newest')
+    RP.push('latest')
     RP.close()
 
 

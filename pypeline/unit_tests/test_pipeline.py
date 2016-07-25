@@ -1,7 +1,7 @@
 import os
 import unittest
 
-import pypeline.config.docker_client as dc
+from pypeline.config.docker_client import DockerClient as dc
 
 import pypeline.unit_tests.test_helper as th
 from pypeline.pipeline.pipeline import Pipeline
@@ -80,7 +80,7 @@ class TestPipeline(unittest.TestCase):
             self.assertEqual('hello1203049', image2.name)
             self.assertTrue(th.image_exists(image2.name))
 
-        with self.pipe.build(directory='.') as image3:  # Build image in build path. Needs to be more extensive.
+        with self.pipe.build(path='.') as image3:  # Build image in build path. Needs to be more extensive.
             self.assertTrue(th.image_exists(image3.name))
 
     def test_pull(self):

@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-import pypeline.config.docker_client as dc
+from pypeline.config.docker_client import DockerClient as dc
 
 
 class Container(object):
@@ -19,8 +19,7 @@ class Container(object):
         if not args:  # Run an arbitrary command so docker doesn't error in some cases.
             args = 'false'
         self.__nametag__ = str(uuid4())
-        self.__id__ = dc.create_container(image_name, self.__nametag__, args) # Equivalent to 'docker run --name name args'
-        dc.run_container(self.__id__)
+        self.__id__ = self._create(image_name, self.__nametag__, args)
 
 
     def remove(self):
@@ -28,6 +27,12 @@ class Container(object):
         :return: None
         """
         dc.remove_container(self.__id__)
+
+    def _create(self, image_name, name, args):
+        return dc.create_container(image_name, name, args)
+
+    def run(self):
+        dc.run_container(self.__id__)
 
     @property
     def id(self):

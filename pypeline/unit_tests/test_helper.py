@@ -1,4 +1,4 @@
-import pypeline.config.docker_client as dc
+from pypeline.config.docker_client import DockerClient as dc
 
 """
 Helper functions for unit tests.

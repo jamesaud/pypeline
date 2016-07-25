@@ -1,8 +1,6 @@
-import threading
-
+import multiprocessing as mp
+import logging
 from pypeline.config.config import DEFAULT_REGISTRY
-
-from pypeline.generic_pipeline.threaded import run_threads
 from pypeline.pipeline.pipeline import Pipeline
 
 
@@ -56,11 +54,21 @@ class GenericPipeline(object):
         - Note - Runs multiple threads to run concurrent containers and generate live output.
         :return: None
         """
-        threads = []  # list of threads to execute
+        containers = []  # list of containers being executed
         for command in commands:  # Or should we run all tests in the same container?
-            t = threading.Thread(target=self.image.container, args=(command,))
-            threads.append(t)
-        run_threads(threads)
+            container = self.image.container(args=command, run_now=False)
+            containers.append(container)
+            container.run()
+        """
+
+        NEW MulTIPROCESSING CODE GOES HERE
+
+        """
+        # Improve - the main function won't stop if a thread errors.
+        #
+        print('deleteting containers!')
+        for container in containers:  # Delete container after running them.
+            container.remove()
 
     def _clone(self, git_url):
         """
@@ -122,3 +130,4 @@ class GenericPipeline(object):
 
     def __exit__(self, exc_type, exc_value, traceback):  # Implements 'with' functionality.
         self.close()
+

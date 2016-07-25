@@ -19,7 +19,7 @@ def test():
     """
     with Pipeline() as pipe:  # Cleans up (deletes work_directory) automatically at the end of the block.
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
-        test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", directory="dockerstuff")
+        test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", path="dockerstuff")
         test_image.container('sleep 6').remove()  # Run container with optional command. delete container after.
         test_image.tag('justatest1232123/myawesomeimage', 'solid')  # Tag it with a solid name
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub

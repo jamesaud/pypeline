@@ -3,8 +3,7 @@ import shutil
 from shutil import copy
 from subprocess import call
 from uuid import uuid4
-
-from pypeline.config.docker_client import pull as dc_pull, login as dc_login
+from pypeline.config.docker_client import DockerClient
 from .image import Image
 
 
@@ -48,7 +47,7 @@ class Pipeline(object):
         :param image_tag: Str - the docker image to pull.
         :return: Image
         """
-        dc_pull(image_tag)  # Pulls the docker image to the machine.
+        DockerClient.pull(image_tag)  # Pulls the docker image to the machine.
         return Image(image_tag)
 
     def close(self):
@@ -80,7 +79,7 @@ class Pipeline(object):
         :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
         :return: None
         """
-        dc_login(username=username, password=password, registry=registry)
+        DockerClient.login(username=username, password=password, registry=registry)
 
     def __enter__(self):  # Implement 'with' functionality
         return self
