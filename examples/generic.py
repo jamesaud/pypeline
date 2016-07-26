@@ -1,4 +1,5 @@
 from pypeline.generic_pipeline import GenericPipeline
+from pypeline.config import clientsetup
 from datetime import datetime
 
 """
@@ -20,6 +21,8 @@ def test():
     """
     Using an alpine image.
     """
+    clientsetup(default=True)
+
     with GenericPipeline() as GP:
         stage('Clone and Build')
         GP.build('https://github.com/jamesaud/simplest_docker')  # Optional dockerfile directory and dockerfile name
@@ -35,6 +38,8 @@ def test2():
     Using a rails app.
     Alternative syntax. If you forget to close, the git cloned work directory will be left in your current directory.
     """
+    clientsetup(default=True)
+
     RP = GenericPipeline()
     try:
         RP.login(registry='dockerhub.cerner.com/', repository='jamesaudretsch')

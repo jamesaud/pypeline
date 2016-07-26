@@ -1,4 +1,2 @@
-from .config import setup, _set_logger
+from .config import clientsetup
 
-setup()
-_set_logger()

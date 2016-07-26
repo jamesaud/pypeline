@@ -1,24 +1,18 @@
 import docker
 import logging
-from .config import CLIENT as cli
 
 """
 The functions in this file are wrappers over the dockerpy api, an api for communicating directly with the docker client.
-This is to keep consistency for all interactions with the docker api, and allow for package wide modifications.
-
-It is required for some functions to be threaded...
-Example: Printing real-time output from a container.
-Problem - If you run a container, print the stdout in real time, and then exec into the container to run more commands,
-          the printing prevents any more commands to be run until it is done. Therefore, exec won't run until the
-          container stops running.
-Solution - Assign background printing to a thread when the container is started.
-Notes - Don't thread any printing function. For example, threading the build function is bad because it will run
-        following commands before the image is done building!
 References - Refer to  'https://github.com/docker/docker-py/blob/master/docs/api.md'  for the docker-py api
 """
 
-
 class DockerClient:
+    cli = None
+
+    @classmethod
+    def assign_client(cls, client):
+        if cls.cli is None:
+            cls.cli = client
 
     @classmethod
     def print_generator(cls, generator, info=None):
@@ -43,7 +37,7 @@ class DockerClient:
         :param image_name: Str - the name of the image to pull.
         :return: None
         """
-        generator = cli.pull(image_name, stream=True)
+        generator = cls.cli.pull(image_name, stream=True)
         cls.print_generator(generator)
 
 
@@ -55,7 +49,7 @@ class DockerClient:
         :param image_id: Str - the id of the image to find.
         :return: Dict - a dictionary containing details about the image.
         """
-        return cli.inspect_image(image_id)
+        return cls.cli.inspect_image(image_id)
 
     @classmethod
     def find_image_by_name(cls, image_name):
@@ -64,7 +58,7 @@ class DockerClient:
         :param image_name: Str - the name of the image to search for.
         :return: List - a list containing a dictionary containing details about the image...IDK why the api works like that.
         """
-        return cli.images(image_name)
+        return cls.cli.images(image_name)
 
     @classmethod
     def find_container(cls, container_id):
@@ -73,7 +67,7 @@ class DockerClient:
         :param container_id: Str - the id of the container to search for.
         :return: Dict - a dictionary containing details about the container.
         """
-        return cli.inspect_container(container_id)
+        return cls.cli.inspect_container(container_id)
 
     @classmethod
     def remove_image(cls, image):
@@ -82,7 +76,7 @@ class DockerClient:
         :param image: Str - the id or name of the image.
         :return: None
         """
-        cli.remove_image(image, True)
+        cls.cli.remove_image(image, True)
         logging.info("Removed image: " + image)
 
     @classmethod
@@ -92,7 +86,7 @@ class DockerClient:
         :param container: Str - id or name of the container.
         :return: None
         """
-        cli.remove_container(container, True)
+        cls.cli.remove_container(container, True)
         logging.info("Removed container : " + container)
 
     @classmethod
@@ -104,7 +98,7 @@ class DockerClient:
         :return: None
         """
         logging.info("Building image " + image_name)
-        logs_generator = cli.build(path=dockerfile_path, rm=True, tag=image_name, dockerfile=dockerfile)
+        logs_generator = cls.cli.build(path=dockerfile_path, rm=True, tag=image_name, dockerfile=dockerfile)
         cls.print_generator(logs_generator)
 
 
@@ -116,7 +110,7 @@ class DockerClient:
         :param push_name: the name of the image to push.
         :return: None
         """
-        cls.print_generator(cli.push(image_name, stream=True))
+        cls.print_generator(cls.cli.push(image_name, stream=True))
 
 
     # Improve - use the docker api to get the actual tag of the image, not creating it with by hand. Might run into errors
@@ -132,7 +126,7 @@ class DockerClient:
         - Looks like "myimage:tagged"
         """
         tagged_name = repo + ":" + tagged
-        cli.tag(image_name, repo, tagged)
+        cls.cli.tag(image_name, repo, tagged)
         logging.info('Tagged ' + tagged_name)
         return tagged_name
 
@@ -145,7 +139,7 @@ class DockerClient:
         :param args: Str - commands to give container
         :return: Str - id of the container
         """
-        container = cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
+        container = cls.cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
         logging.info('Created container (did not run yet) with commands: ' + args)
         return container['Id']  # Get id from dictionary
 
@@ -159,9 +153,9 @@ class DockerClient:
         :return: Dict - the id of the generated container.
         - Note - the output is ran through the threaded logging.info generator method.
         """
-        cli.start(container_id)  # Start the container
+        cls.cli.start(container_id)  # Start the container
         logging.info('Running container: ' + container_id)
-        logs = cli.logs(container=container_id, stdout=True, stream=True)
+        logs = cls.cli.logs(container=container_id, stdout=True, stream=True)
         cls.print_generator(logs, container_id)
 
     @classmethod
@@ -171,8 +165,8 @@ class DockerClient:
         :param container: Str - id or name of container to remove.
         :return: None
         """
-        cli.stop(container=container)
-        cli.remove_container(container=container, v=True)  # v=True means force remove
+        cls.cli.stop(container=container)
+        cls.cli.remove_container(container=container, v=True)  # v=True means force remove
         logging.info('Removed container: ' + container)
 
 
@@ -183,10 +177,10 @@ class DockerClient:
     #     :param args: Str or List - commands to run inside the container.
     #     :return: Generator
     #     """
-    #     executor = cli.exec_create(container=container_id, cmd=args)
+    #     executor = cls.cli.exec_create(container=container_id, cmd=args)
     #     exec_id = executor['Id']
     #     logging.info('Running inside container: ' + container_id + ' with commands: ' + "'{}'".format(args))
-    #     cli.exec_start(exec_id=exec_id, stream=True, detach=True)
+    #     cls.cli.exec_start(exec_id=exec_id, stream=True, detach=True)
 
     @classmethod
     def login(cls, username=None, password=None, registry=None):
@@ -195,7 +189,7 @@ class DockerClient:
         :param login: Dict - {'username':None, 'password':None, 'email':None, 'registry':None, 'reauth':None, 'dockercfg_path':None}
         :return: None
         """
-        login_data = cli.login(username=username, password=password, registry=registry)
+        login_data = cls.cli.login(username=username, password=password, registry=registry)
         status = login_data.get('Status')
         if status is not None:
             logging.info(status)

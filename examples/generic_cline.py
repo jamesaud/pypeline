@@ -4,6 +4,7 @@ import sys
 import re
 from datetime import datetime
 from pypeline.generic_pipeline import GenericPipeline
+from pypeline.config import clientsetup
 
 
 def stage(name):
@@ -18,6 +19,7 @@ def run(registry, registry_username, registry_password, git_url, *test):
     """
     Using an alpine image.
     """
+    clientsetup(default=True)
     with GenericPipeline() as GP:
         stage('Clone and Build')
         GP.build(git_url)  # Optional dockerfile directory and dockerfile name

@@ -44,7 +44,7 @@ class Pipeline(object):
         path_to_dockerfile = os.path.join(self.cloned_directory, path)  # Full path to the dockerfile
         return Image(image_tag, build=True, path=path_to_dockerfile, dockerfile=dockerfile)  # Build = True.
 
-    @classmethod
+
     def pull(self, image_tag):
         """
         Pull docker image from dockerhub.
@@ -77,8 +77,8 @@ class Pipeline(object):
         except TypeError as e:
             print(e, " Are you sure you cloned from git?")
 
-    @classmethod
-    def login(self, username=None, password=None, registry=None):
+    @staticmethod
+    def login(username=None, password=None, registry=None):
         """
         Logs in to a docker registry, defaults to dockerhub at 'https://index.docker.io/v1/'
         :param username: Str - the username to the account.

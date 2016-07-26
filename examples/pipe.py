@@ -1,7 +1,8 @@
 from pypeline.pipeline import Pipeline
-
+from pypeline.config import clientsetup
 #------The good way to do this------
 def test():
+    clientsetup(default=True)
     """
     Runs a basic pipeline.
     Each block of code runs a new pipeline.
@@ -12,8 +13,8 @@ def test():
     4. Tag image with nice name.
     5. Push image to repository.
     -----------
-    Notes - the images used in this example might fail to delete if it already has dependent images on your machine.
     """
+
     """
     Good way to run a pipeline.
     """
