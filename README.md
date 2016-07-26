@@ -1,5 +1,5 @@
 ## Pypeline
-A docker pipeline built in python. The ability to execute the following workflow:
+A docker pipeline built in python. The ability to execute and design workflows. It might look like:
 
 *clone from github - build docker image - run tests in docker container(s) - push to docker repository*
 
@@ -69,9 +69,9 @@ with GenericPipeline() as GP:
 
 Look in the examples folder for full examples of these two modules.
 
-'generic-cline.py' is an example of a built generic pipeline that allows for command line input.
+*generic-cline.py* is an example of a built generic pipeline that allows for command line input.
 
->python generic_cline.py --username justatest1232123 --password Justatest123 --url \ 
+>python3 generic-cline.py --username justatest1232123 --password Justatest123 --url \
 
 >https://github.cerner.com/JA048043/docker_test --test 'echo "hello world"' --test 'echo "hi"'
 
@@ -85,12 +85,17 @@ Manually doing CI/CD using docker can be a bloated process, including configurat
 To provide a clear structure for building CI/CD pipelines with docker. This is an Object Oriented approach to building pipelines that requires very little code to get up and running.
 
 ## Installation
-Make sure you have python3
->git clone https://github.cerner.com/JA048043/pypeline
+Make sure you have python3.
 
+You must have git installed with command line input, because the pipeline uses the shell command 'git clone'.
+
+How to install:
+
+>git clone https://github.cerner.com/JA048043/pypeline
 
 >cd pypeline
 
+>pip3 install -r requirements.txt
 
 >python3 setup.py install
 
@@ -182,7 +187,7 @@ Image is a representation of a docker image. It is returned when calling 'Pipeli
 
 Creates a docker container based on the image. Does **not** run it.
 
-Use either <Container>.run(), or <Image>.run_container() to run a container.
+Use either \<Container\>.run(), or \<Image\>.run_container() to run a container.
 
 **Params**:
 
