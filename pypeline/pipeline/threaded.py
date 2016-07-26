@@ -2,7 +2,9 @@ import concurrent.futures
 
 
 class Parallel:
-
+    """
+    Runs functions in parallel threads. Use 'add' to add a function and it's arguments. Use 'run' to execute.
+    """
     def __init__(self):
         self.future_to_add = []
         self.executor = concurrent.futures.ThreadPoolExecutor()

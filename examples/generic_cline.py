@@ -19,7 +19,7 @@ def run(registry, registry_username, registry_password, git_url, *test):
     """
     Using an alpine image.
     """
-    clientsetup(default=True)
+    clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
     with GenericPipeline() as GP:
         stage('Clone and Build')
         GP.build(git_url)  # Optional dockerfile directory and dockerfile name

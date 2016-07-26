@@ -21,7 +21,7 @@ def test():
     """
     Using an alpine image.
     """
-    clientsetup(default=True)
+    clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
 
     with GenericPipeline() as GP:
         stage('Clone and Build')
@@ -38,7 +38,7 @@ def test2():
     Using a rails app.
     Alternative syntax. If you forget to close, the git cloned work directory will be left in your current directory.
     """
-    clientsetup(default=True)
+    clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
 
     RP = GenericPipeline()
     try:
