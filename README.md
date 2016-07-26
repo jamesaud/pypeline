@@ -17,6 +17,7 @@ Before being able to do any pipeline code, you have to specify where the docker 
 `clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')`
 
 Or on unix:
+
 `clientsetup(docker_base_url=unix://var/run/docker.sock)`
 
 Refer to https://github.com/docker/docker-py/blob/master/docs/api.md, the docker-py api.
