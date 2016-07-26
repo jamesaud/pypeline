@@ -155,7 +155,10 @@ Logs into dockerhub, or another registry, using a username and password.
 Image returned when calling 'Pipeline().build' or 'Pipeline().pull'. You *could* use it independently of pipeline...
 
 ###Properties:
-* Read-Only: id, tag
+
+* id : the id of the image. : read-only
+
+* name: the name of the image. : read-only
 
 ###container
 
