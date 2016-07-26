@@ -256,6 +256,8 @@ Runs the container.
 
 ##-GenericPipeline-
 
+>from pypeline.generic_pipeline import GenericPipeline
+
 ###build
 
 Builds a docker image from the git directory.
