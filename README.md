@@ -8,7 +8,9 @@ The **pipeline** module and **generic pipeline** module allow you to generate pi
 Please checkout the examples in 'examples' for full code.
 
 ### Pipeline
-Create complex pipelines that allow for fast and flexible docker deployments. It is based on the [docker-py](https://github.com/docker/docker-py/blob/master/docs/api.md "dockerpy") api.
+Create complex pipelines that allow for fast and flexible docker deployments. 
+
+It is build upon [docker-py](https://github.com/docker/docker-py/blob/master/docs/api.md "dockerpy"), a python wrapper around the REST api of the docker daemon.
 
 This first example is drawn out and done 'the long way', but showcases some of the important operations available.
 
@@ -16,11 +18,13 @@ Before being able to do any pipeline code, you have to specify where the docker 
 
 `clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')`
 
+default=True 
+
 Or on unix:
 
 `clientsetup(docker_base_url=unix://var/run/docker.sock)`
 
-Refer to https://github.com/docker/docker-py/blob/master/docs/api.md, the docker-py api.
+Refer to [the docker-py api](https://github.com/docker/docker-py/tree/master/docs "the docker-py api").
 ```python
 from pypeline.pipeline import Pipeline
 from pypeline.config import clientsetup
@@ -62,6 +66,16 @@ with GenericPipeline() as GP:
         GP.login(username='justatest1232123', password='Justatest123')  # Optional registry and repository argument
         GP.push('latest')  # Tag before it pushes.
 ```
+
+Look in the examples folder for full examples of these two modules.
+
+'generic-cline.py' is an example of a built generic pipeline that allows for command line input.
+
+>python generic_cline.py --username justatest1232123 --password Justatest123 --url \ 
+
+>https://github.cerner.com/JA048043/docker_test --test 'echo "hello world"' --test 'echo "hi"'
+
+
 ## Motivation
 
 ###Problem Statement
