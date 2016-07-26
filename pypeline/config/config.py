@@ -17,7 +17,7 @@ def _set_logger():
     logging.basicConfig(level=LOGGING_LEVEL, format='%(message)s')
 
 
-def clientsetup(DOCKER_BASE_URL=None,
+def clientsetup(docker_base_url=None,
           TLS=None,
           default=False):
     """
@@ -38,15 +38,15 @@ def clientsetup(DOCKER_BASE_URL=None,
             client_cert = (os.path.join(CERTS, 'cert.pem'), os.path.join(CERTS, 'key.pem')),
             ca_cert = os.path.join(CERTS, 'ca.pem'),
             verify = True)
-
-        DOCKER_BASE_URL = 'https://192.168.99.100:2376'
-
     else:
-        TLS_CONFIG = docker_tls.TLSConfig(
+        if TLS:
+            TLS_CONFIG = docker_tls.TLSConfig(
             client_cert=TLS['client_cert'],
             ca_cert=TLS['ca_cert'],
             verify=TLS['verify'])
+        else:
+            TLS_CONFIG = None
 
-    CLIENT = docker.Client(base_url=DOCKER_BASE_URL, tls=TLS_CONFIG)
+    CLIENT = docker.Client(base_url=docker_base_url, tls=TLS_CONFIG)
     DockerClient.assign_client(CLIENT)
     _set_logger()
