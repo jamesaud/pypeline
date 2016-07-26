@@ -1,64 +1,65 @@
-# pypeline
-a docker pipeline in python - clone from git, build docker image, run tests in docker containers, push to docker repo.
+## Pypeline
+A docker pipeline built in python. The ability to execute the following workflow:
 
-#Installation
-clone:
->git clone https://github.cerner.com/JA048043/pypeline
+*clone from github - build docker image - run tests in docker container(s) - push to docker repository*
 
-install (make sure pip is installed):
->cd pypeline
+## Code Examples
+The **pipeline** module and **generic pipeline** module allow you to generate pipelines.
+Please checkout the examples in 'examples' for full code.
 
->sudo python3 setup.py install
+### Pipeline
+Create complex pipelines that allow for fast and flexible docker deployments.
+```python
+from pipeline import Pipeline
 
-Copy the code from 'example_pipe.py' and see how it works.
+with Pipeline() as pipe:
+    pipe.clone('https://github.cerner.com/JA048043/docker_test')  # clone from git
+    test_image = pipe.build('justatest1232123/myawesomeimage')  # build with name
+    test_image.run_container('echo "rspec"').remove()  # run commands in container, and delete.
+    test_image.tag('justatest1232123/myawesomeimage', 'solid')  # Tag it with a solid name
+    pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
+    test_image.push()  # Push.
+    test_image.remove()  #Remove the image, if you really want.
+```
+However, it is possible to make the code much more compact.
+```python
+with Pipeline() as pipe:
+        pipe.clone('https://github.cerner.com/JA048043/docker_test')
+        with pipe.build() as myImage, myImage.run_container('echo "unit-tests"'):
+            myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push('latest')
+#  The image and container are automatically deleted when the block ends.
+```
 
-# GenericPipeline Use
-Look at the example. Is the most straightforward way to build, test, and run from a git project.
+### Generic Pipeline
+The easiest but less flexible way to build a pipeline. The goal of the Generic Pipeline is to streamline the process for testing on a single image.
 
-# Pipeline Use
-Look at the example. Is capable of doing a little more advanced pipelines.
+```python
+with GenericPipeline() as GP:
+        GP.build('https://github.com/jamesaud/simplest_docker')  # Clone and build.
+        GP.test('echo "first test"', 'echo "second test"', 'echo "third test"')  # Run parallel commands in separate containers
+        GP.login(username='justatest1232123', password='Justatest123')  # Optional registry argument
+        GP.push('latest')  # Tag before it pushes.
+```
+## Motivation
 
-- Open a python3.5 file and write:
->from pypeline.pipeline import Pipeline
+A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
 
-- Create Pipeline object:
-> pipe = Pipeline()
+## Installation
 
-> pipe.close()
+Provide code examples and explanations of how to get the project.
 
-- You must close the Pipeline object at the end, so preferably use 'with' instead. It will automatically close at the end of the block:
->with Pipeline() as pipe:
->    ...
+## API Reference
 
-- Make a docker image:
-Pull an image:
->image = pipe.pull('alpine:latest')
-- Delete an image:
->image.remove()
+Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
 
-- Or, Clone and Build an image (optional path to dockerfile argument):
->pipe.clone('https://github.com/jamesaud/simplest_docker')
->image = pipe.build()
+## Tests
 
-- Image supports the 'with' syntax as well:
->with pipe.pull('alpine:latest') as alpine_image:
->    ...
+Describe and show how to run the tests with code examples.
 
-- Run a container based on an image
->container = image.container('echo "hello world!")
-- Remove a container
->container.remove()
+## Contributors
 
-- Container supports 'with' syntax:
->with alpine_image.container('echo "hello world"'):
->    ...:
+Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
 
-- Push an image to dockerhub
-Tag an image:
->alpine_newest = alpine_image.tag('superawesomealpine', 'version1')
+## License
 
-- Login to dockerhub:
->pipe.login(username='myName', password='secret')
-
-- Push the image:
->alpine_newest.push()
+A short snippet describing the license (MIT, Apache, etc.)
