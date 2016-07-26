@@ -74,7 +74,7 @@ class Image(object):
         """
         dc.push(self.__nametag__)
 
-    def tag(self, repo, tagged='latest'):
+    def tag(self, repo):
         """
         Tag the image.
         :param repo: Str - the registry + repo name eg. 'dockerhub.com/james/myrepo'
@@ -82,7 +82,12 @@ class Image(object):
         :return: self
         - The image name will now be repo:tag, eg. self.__nametag__ = 'james/myrepo:coolv2'
         """
-        self.__nametag__ = dc.tag(self.__nametag__, repo, tagged)
+        try:
+            split = repo.split(':')
+            repo, tagged = split[0], split[1]
+        except IndexError:
+            repo, tagged = repo, 'latest'
+        self.__nametag__ = dc.tag(self.name, repo, tagged)
         return self
 
     @property

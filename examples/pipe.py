@@ -21,7 +21,7 @@ def test():
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", path="dockerstuff")
         test_image.container('sleep 6').remove()  # Run container with optional command. delete container after.
-        test_image.tag('justatest1232123/myawesomeimage', 'solid')  # Tag it with a solid name
+        test_image.tag('justatest1232123/myawesomeimage:solid')  # Tag it with a solid name
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
         test_image.push()
         #test_image.remove()  #Remove the image, if you really want.
@@ -44,7 +44,7 @@ def test():
     """
     with Pipeline() as pipe, pipe.pull('alpine:latest') as myImage, myImage.run_container(args='echo "rspec"'):
         pipe.login(username='justatest1232123', password='Justatest123')  # Login to dockerhub
-        myImage.tag("justatest1232123/myawesomeimage", "jusatest").push()
+        myImage.tag("justatest1232123/myawesomeimage:jusatest").push()
 
 
 

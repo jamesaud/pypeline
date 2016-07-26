@@ -33,7 +33,7 @@ def setup(DOCKER_BASE_URL='https://192.168.99.100:2376',
         client_cert = os.path.join(CERTS, 'cert.pem'), os.path.join(CERTS, 'key.pem')
         ca_cert = os.path.join(CERTS, 'ca.pem')
         verify = True
-    else:
+    elif TLS:
         client_cert = TLS['client_cert']
         ca_cert = TLS['ca_cert']
         verify = TLS['verify']

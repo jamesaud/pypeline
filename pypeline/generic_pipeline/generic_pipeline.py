@@ -37,7 +37,7 @@ class GenericPipeline(object):
         Tag the image correctly. Should looke like registry/repo/image:tag
         :param tag: Str - the tag to give the image. This is the part of the url that is after ":"
         :return: None
-        Notes - could look like 'dockerhub.com/james/myrepo/myimage:latest'
+        Notes - could look like 'registry.com/james/myrepo/myimage:latest'
         """
         def parse_repo_name(git_url):
             return git_url.split('/')[-1].lower()  # Get everything after 'github.com/' and lowercase it.
@@ -45,7 +45,7 @@ class GenericPipeline(object):
             base_docker_tag_url = ''
         else:
             base_docker_tag_url = self.registry
-        self.image.tag(base_docker_tag_url + self.repository + '/' + parse_repo_name(self.git_url), tag)  # Set the image tag.
+        self.image.tag(base_docker_tag_url + self.repository + '/' + parse_repo_name(self.git_url) + ':' + tag)  # Set the image tag.
 
     def test(self, *commands):
         """
@@ -55,7 +55,6 @@ class GenericPipeline(object):
         :return: None
         """
         self.image.run_parallel_containers(*commands)  # list of commands being executed
-
 
     def _clone(self, git_url):
         """
