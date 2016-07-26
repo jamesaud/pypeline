@@ -81,8 +81,42 @@ Make sure you have python3
 
 ##API Reference
 
-### Pipeline
-#### attach
+###Pipeline
+
+#### clone
+
+Clone from git repository. Just like the git clone command
+
+**Params**:
+
+* git_url (str): The url of the project to clone.
+
+**Returns** None
+
+#### build
+
+Builds from the cloned directory.
+
+**Params**:
+
+* image_tag (str): The name to give the image. : optional
+
+* path (str): The relative path to the dockerfile : optional
+
+* dockerfile (str): The name of the dockerfile  : optional
+
+**Returns** Image - an image object representing this docker image.
+
+#### pull
+
+
+**Params**:
+
+* container (str): The container to attach to
+
+**Returns** (generator or str): The logs or output for the image
+
+#### close
 
 The `.logs()` function is a wrapper around this method, which you can use
 instead if you want to fetch/stream container output without first retrieving
@@ -91,14 +125,32 @@ the entire backlog.
 **Params**:
 
 * container (str): The container to attach to
-* stdout (bool): Get STDOUT
-* stderr (bool): Get STDERR
-* stream (bool): Return an iterator
-* logs (bool): Get all previous output
 
 **Returns** (generator or str): The logs or output for the image
 
+#### copy_to_cloned_directory
 
+The `.logs()` function is a wrapper around this method, which you can use
+instead if you want to fetch/stream container output without first retrieving
+the entire backlog.
+
+**Params**:
+
+* container (str): The container to attach to
+
+**Returns** (generator or str): The logs or output for the image
+
+#### login
+
+The `.logs()` function is a wrapper around this method, which you can use
+instead if you want to fetch/stream container output without first retrieving
+the entire backlog.
+
+**Params**:
+
+* container (str): The container to attach to
+
+**Returns** (generator or str): The logs or output for the image
 ## Tests
 
 Unit tests are only provided for the pipeline, not the generic pipeline. They are in the unit_tests folder. Something to note is that a side effect of testing might be that a small busybox or alpine image remains on your machine.
