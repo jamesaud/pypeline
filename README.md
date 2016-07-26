@@ -80,9 +80,9 @@ Make sure you have python3
 
 >python3 setup.py install
 
-##API Reference
+##**API Reference**
 
-###----Pipeline----
+###-Pipeline-
 
 ### clone
 
@@ -150,7 +150,7 @@ Logs into dockerhub, or another registry, using a username and password.
 
 **Returns** None
 
-## Image
+##-Image-
 
 Image is a representation of a docker image. It is returned when calling 'Pipeline().build' or 'Pipeline().pull'. You *could* also use it independently of pipeline...
 
@@ -222,7 +222,7 @@ Pushes to registry. Like 'docker push ...'. Follows the same rules as regular do
 
 **Returns** None
 
-## Container
+##-Container-
 
 Container is a representation of a docker container.
 
@@ -243,6 +243,67 @@ Removes the container.
 ###run
 
 Runs the container.
+
+**Params**:
+
+**Returns** None
+
+##-GenericPipeline-
+
+###build
+
+Builds a docker image from the git directory.
+
+**Params**:
+
+* git_url (str): The url of the github project.
+
+* path (str): The relative path to the dockerfile : optional
+
+* dockerfile (str): The name of the dockerfile  : optional
+
+**Returns** None
+
+###test
+
+Runs commands inside of parallel containers.
+
+**Params**:
+
+* \*commands : commands to run in containers based on the built image. Any number of comma separated arguments.
+
+**Returns** None
+
+###login
+
+Logs into a docker registry. Also provides the naming for the image this way. If using dockerhub, your image will look like: 'username/git_project_name:tag'
+
+If logging into a private repository, you'll need to provide the repository argument to tell it where to upload.
+
+>GenericPipeline().login(registry='privaterepo@dockerregistry.hub, repository='myname')
+
+Your image will look like: 'registry/repo/git_project_name:tag'
+
+**Params**:
+
+* username (str) : the username for the repository : optional
+* password (str) : the password for the repository : optional 
+* registry (str) : the registry to upload to, defaults to dockerhub. 
+* repository (str) : only required if providing the registry, tells the generic pipeline which repository to upload to if not provided a username : optional
+
+**Returns** None
+
+###push
+
+Pushes the image.
+
+**Params**:
+
+**Returns** None
+
+###close
+
+Closes the Pipeline() that was opened. Is called automatically using 'with' syntax.
 
 **Params**:
 
