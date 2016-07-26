@@ -83,6 +83,7 @@ Make sure you have python3
 ##**API Reference**
 
 ##-Pipeline-
+>from pypeline.pipeline import Pipeline
 
 ### clone
 
