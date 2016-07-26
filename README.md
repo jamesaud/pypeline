@@ -80,9 +80,9 @@ Make sure you have python3
 
 >python3 setup.py install
 
-##**API Reference**
+##API Reference
 
-##Pipeline
+###----Pipeline----
 
 ### clone
 
