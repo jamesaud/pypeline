@@ -79,9 +79,9 @@ Make sure you have python3
 
 >python3 setup.py install
 
-##API Reference
+#API Reference
 
-###Pipeline
+##Pipeline
 
 ### clone
 
@@ -105,52 +105,119 @@ Builds from the cloned directory.
 
 * dockerfile (str): The name of the dockerfile  : optional
 
-**Returns** Image - an image object representing this docker image.
+**Returns** Image: an image object representing this docker image.
 
 ### pull
 
+Pulls an image, just like 'docker pull ...'
 
 **Params**:
 
-* container (str): The container to attach to
+* image_tag (str): The url of the image to pull.
 
-**Returns** (generator or str): The logs or output for the image
+**Returns** Image: an image object representing the docker image.
 
 ### close
 
-The `.logs()` function is a wrapper around this method, which you can use
-instead if you want to fetch/stream container output without first retrieving
-the entire backlog.
+Closes the Pipeline. Because pipeline creates a directory to keep everything separated from the rest of your files, this function must be called at the end of the pipeline. Using 'with' syntax calls this command.
 
 **Params**:
-
-* container (str): The container to attach to
 
 **Returns** (generator or str): The logs or output for the image
 
 ### copy_to_cloned_directory
 
-The `.logs()` function is a wrapper around this method, which you can use
-instead if you want to fetch/stream container output without first retrieving
-the entire backlog.
+Copys a single file into the cloned directory.
 
 **Params**:
 
-* container (str): The container to attach to
+* full_file_path (str): The path to the file you wish to copy into the cloned directory.
 
-**Returns** (generator or str): The logs or output for the image
+**Returns** None
 
-####login
+###login
 
-The `.logs()` function is a wrapper around this method, which you can use
-instead if you want to fetch/stream container output without first retrieving
-the entire backlog.
+Logs into dockerhub, or another registry, using a username and password.
 
 **Params**:
 
-* container (str): The container to attach to
+* username (str): The username for the registry. : optional
+ 
+* password (str): The password for the registry. : optional
 
-**Returns** (generator or str): The logs or output for the image
+* registry (str): The url of the registry to login to. : optional
+
+**Returns** None
+
+## Image
+
+Image returned when calling 'Pipeline().build' or 'Pipeline().pull'. You *could* use it independently of pipeline...
+
+###Properties:
+* Read-Only: id, tag
+
+###container
+
+Creates a docker container based on the image. Does **not** run it.
+
+Use either <Container>.run(), or <Image>.run_container() to run a container.
+
+**Params**:
+
+* args (str): The args to run inside the container : optional
+
+* name (str): The name to give the docker container : optional
+
+**Returns** Container : a container object representing a docker container.
+
+###run_container
+
+Same as 'container' but runs the container immediately. Is usually advised unless you have a reason to forgo running the container.
+
+**Params**:
+
+* args (str): The args to run inside the container : optional
+
+* name (str): The name to give the docker container : optional
+
+**Returns** Container : a container object representing a docker container.
+
+###run_parallel_containers
+
+Runs containers in parallel.  
+
+**Params**:
+
+* \*commands (str): Any amount of comma separated commands to run. Each separated command will be run in a separate container.
+
+**Returns** None
+
+###remove
+
+Deletes the image. Is called when using 'with' syntax.
+
+**Params**:
+
+**Returns** None
+
+###tag
+
+Tags the image, and returns a new image
+
+**Params**:
+
+* name (str): The new name to give the image.
+
+**Returns** Image (Self): returns itself with the tagged name.
+
+###push
+
+Pushes to registry. Like 'docker push ...'. Follows the same rules as regular docker. If you want to push to a private registry prepend the name of the image with 'registry.com/repo/image:tag'. To push to docker just keep the image name 'repo/image:tag'
+
+**Params**:
+
+**Returns** None
+
 ## Tests
 
 Unit tests are only provided for the pipeline, not the generic pipeline. They are in the unit_tests folder. Something to note is that a side effect of testing might be that a small busybox or alpine image remains on your machine.
