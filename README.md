@@ -182,7 +182,7 @@ Image is a representation of a docker image. It is returned when calling 'Pipeli
 
 Creates a docker container based on the image. Does **not** run it.
 
-Use either <Container>.run(), or <Image>.run_container() to run a container.
+Use either \<Container\>.run(), or \<Image\>.run_container() to run a container.
 
 **Params**:
 
