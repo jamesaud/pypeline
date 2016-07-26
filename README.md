@@ -40,7 +40,6 @@ with Pipeline() as pipe:
 However, it is possible and recommended to make the code much more compact.
 Python's 'with' syntax provides an automatic closure at the end of the block.
 ```python
-clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
 with Pipeline() as pipe:
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         with pipe.build() as myImage, myImage.run_container('echo "unit-tests"'):
@@ -80,9 +79,25 @@ Make sure you have python3
 
 >python3 setup.py install
 
-## API Reference
+##API Reference
 
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
+### Pipeline
+#### attach
+
+The `.logs()` function is a wrapper around this method, which you can use
+instead if you want to fetch/stream container output without first retrieving
+the entire backlog.
+
+**Params**:
+
+* container (str): The container to attach to
+* stdout (bool): Get STDOUT
+* stderr (bool): Get STDERR
+* stream (bool): Return an iterator
+* logs (bool): Get all previous output
+
+**Returns** (generator or str): The logs or output for the image
+
 
 ## Tests
 
