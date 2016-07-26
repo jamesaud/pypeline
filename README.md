@@ -57,7 +57,11 @@ To provide a clear structure for building CI/CD pipelines with docker. This is a
 ## Installation
 Make sure you have python 
 >git clone https://github.cerner.com/JA048043/pypeline
+
+
 >cd pypeline
+
+
 >python3 setup.py install
 
 ## API Reference
