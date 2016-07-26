@@ -85,9 +85,13 @@ Manually doing CI/CD using docker can be a bloated process, including configurat
 To provide a clear structure for building CI/CD pipelines with docker. This is an Object Oriented approach to building pipelines that requires very little code to get up and running.
 
 ## Installation
-Make sure you have python3
->git clone https://github.cerner.com/JA048043/pypeline
+Make sure you have python3.
 
+You must have git installed with command line input, because the pipeline uses the shell command 'git clone'
+
+How to install:
+
+>git clone https://github.cerner.com/JA048043/pypeline
 
 >cd pypeline
 
