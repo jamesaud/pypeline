@@ -80,7 +80,7 @@ Make sure you have python3
 
 >python3 setup.py install
 
-#API Reference
+##**API Reference**
 
 ##Pipeline
 
@@ -152,7 +152,7 @@ Logs into dockerhub, or another registry, using a username and password.
 
 ## Image
 
-Image returned when calling 'Pipeline().build' or 'Pipeline().pull'. You *could* use it independently of pipeline...
+Image is a representation of a docker image. It is returned when calling 'Pipeline().build' or 'Pipeline().pull'. You *could* also use it independently of pipeline...
 
 ###Properties:
 
@@ -222,6 +222,32 @@ Pushes to registry. Like 'docker push ...'. Follows the same rules as regular do
 
 **Returns** None
 
+## Container
+
+Container is a representation of a docker container.
+
+###Properties:
+
+* id : the id of the container. : read-only
+
+* name: the name of the container. : read-only
+
+###remove
+
+Removes the container.
+
+**Params**:
+
+**Returns** None
+
+###run
+
+Runs the container.
+
+**Params**:
+
+**Returns** None
+
 ## Tests
 
 Unit tests are only provided for the pipeline, not the generic pipeline. They are in the unit_tests folder. Something to note is that a side effect of testing might be that a small busybox or alpine image remains on your machine.
@@ -231,4 +257,3 @@ Unit tests are only provided for the pipeline, not the generic pipeline. They ar
 James Audretsch: jamaudre@indiana.edu james.audretsch@cerner.com
 
 ## License
-Still under consideration.
