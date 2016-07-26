@@ -18,6 +18,8 @@ Before being able to do any pipeline code, you have to specify where the docker 
 
 `clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')`
 
+default=True 
+
 Or on unix:
 
 `clientsetup(docker_base_url=unix://var/run/docker.sock)`
@@ -64,6 +66,16 @@ with GenericPipeline() as GP:
         GP.login(username='justatest1232123', password='Justatest123')  # Optional registry and repository argument
         GP.push('latest')  # Tag before it pushes.
 ```
+
+Look in the examples folder for full examples of these two modules.
+
+'generic-cline.py' is an example of a built generic pipeline that allows for command line input.
+
+>python generic_cline.py --username justatest1232123 --password Justatest123 --url \ 
+
+>https://github.cerner.com/JA048043/docker_test --test 'echo "hello world"' --test 'echo "hi"'
+
+
 ## Motivation
 
 ###Problem Statement
