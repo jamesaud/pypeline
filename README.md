@@ -1,5 +1,5 @@
 ## Pypeline
-A docker pipeline built in python. The ability to execute the following workflow:
+A docker pipeline built in python. The ability to execute and design workflows. It might look like:
 
 *clone from github - build docker image - run tests in docker container(s) - push to docker repository*
 
