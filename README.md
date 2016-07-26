@@ -83,6 +83,7 @@ Make sure you have python3
 ##**API Reference**
 
 ##-Pipeline-
+
 >from pypeline.pipeline import Pipeline
 
 ### clone
@@ -152,6 +153,8 @@ Logs into dockerhub, or another registry, using a username and password.
 **Returns** None
 
 ##-Image-
+
+>from pypeline.pipeline import Image
 
 Image is a representation of a docker image. It is returned when calling 'Pipeline().build' or 'Pipeline().pull'. You *could* also use it independently of pipeline...
 
@@ -224,6 +227,8 @@ Pushes to registry. Like 'docker push ...'. Follows the same rules as regular do
 **Returns** None
 
 ##-Container-
+
+from pypeline.pipeline import Pipeline
 
 Container is a representation of a docker container.
 
