@@ -22,7 +22,7 @@ Or on unix:
 
 `clientsetup(docker_base_url=unix://var/run/docker.sock)`
 
-Refer to https://github.com/docker/docker-py/blob/master/docs/api.md, the docker-py api.
+Refer to [the docker-py api](https://github.com/docker/docker-py/tree/master/docs "the docker-py api").
 ```python
 from pypeline.pipeline import Pipeline
 from pypeline.config import clientsetup
