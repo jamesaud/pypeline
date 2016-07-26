@@ -83,7 +83,7 @@ Make sure you have python3
 
 ###Pipeline
 
-#### clone
+### clone
 
 Clone from git repository. Just like the git clone command
 
@@ -93,7 +93,7 @@ Clone from git repository. Just like the git clone command
 
 **Returns** None
 
-#### build
+### build
 
 Builds from the cloned directory.
 
@@ -107,7 +107,7 @@ Builds from the cloned directory.
 
 **Returns** Image - an image object representing this docker image.
 
-#### pull
+### pull
 
 
 **Params**:
@@ -116,7 +116,7 @@ Builds from the cloned directory.
 
 **Returns** (generator or str): The logs or output for the image
 
-#### close
+### close
 
 The `.logs()` function is a wrapper around this method, which you can use
 instead if you want to fetch/stream container output without first retrieving
@@ -128,7 +128,7 @@ the entire backlog.
 
 **Returns** (generator or str): The logs or output for the image
 
-#### copy_to_cloned_directory
+### copy_to_cloned_directory
 
 The `.logs()` function is a wrapper around this method, which you can use
 instead if you want to fetch/stream container output without first retrieving
@@ -140,7 +140,7 @@ the entire backlog.
 
 **Returns** (generator or str): The logs or output for the image
 
-#### login
+####login
 
 The `.logs()` function is a wrapper around this method, which you can use
 instead if you want to fetch/stream container output without first retrieving
