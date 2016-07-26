@@ -87,7 +87,7 @@ To provide a clear structure for building CI/CD pipelines with docker. This is a
 ## Installation
 Make sure you have python3.
 
-You must have git installed with command line input, because the pipeline uses the shell command 'git clone'
+You must have git installed with command line input, because the pipeline uses the shell command 'git clone'.
 
 How to install:
 
