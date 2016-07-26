@@ -42,6 +42,7 @@ class Image(object):
         """
         Create and run a container with given commands.
         :param args: String - the commands to run in a docker container.
+        :param name: String - the name to give the container.
         :return: Container - a running container
         """
         container = Container(self.__id__, args, name)  # Random unique container name.
@@ -74,7 +75,7 @@ class Image(object):
         """
         dc.push(self.__nametag__)
 
-    def tag(self, repo):
+    def tag(self, name):
         """
         Tag the image.
         :param repo: Str - the registry + repo name eg. 'dockerhub.com/james/myrepo'
@@ -83,11 +84,11 @@ class Image(object):
         - The image name will now be repo:tag, eg. self.__nametag__ = 'james/myrepo:coolv2'
         """
         try:
-            split = repo.split(':')
-            repo, tagged = split[0], split[1]
+            split = name.split(':')
+            name, tagged = split[0], split[1]
         except IndexError:
-            repo, tagged = repo, 'latest'
-        self.__nametag__ = dc.tag(self.name, repo, tagged)
+            repo, tagged = name, 'latest'
+        self.__nametag__ = dc.tag(self.name, name, tagged)
         return self
 
     @property
