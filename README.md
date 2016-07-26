@@ -8,7 +8,7 @@ The **pipeline** module and **generic pipeline** module allow you to generate pi
 Please checkout the examples in 'examples' for full code.
 
 ### Pipeline
-Create complex pipelines that allow for fast and flexible docker deployments. It is based on the [docker-py](https://github.com/docker/docker-py/blob/master/docs/api.md "dockerpy").
+Create complex pipelines that allow for fast and flexible docker deployments. It is build by using [docker-py](https://github.com/docker/docker-py/blob/master/docs/api.md "dockerpy"), a python wrapper around the REST api of the docker daemon.
 
 This first example is drawn out and done 'the long way', but showcases some of the important operations available.
 
