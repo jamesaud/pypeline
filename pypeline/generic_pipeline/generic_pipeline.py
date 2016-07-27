@@ -90,7 +90,10 @@ class GenericPipeline(object):
         if self.registry == DEFAULT_REGISTRY:  # Print the dockerhub url if relevant.
             print('See it on your browser at dockerhub.com/r/' + self.image.name.split(':')[0])  # Get rid of the tag.
 
-    def login(self, username=None, password=None, registry=DEFAULT_REGISTRY, repository=None):
+    def login(self, username=None, password=None, registry=None, repository=None):
+        if registry is None:
+            registry = DEFAULT_REGISTRY
+
         def _add_trailing_slash(url):
             return url + '/' if url[-1] != '/' else url  # If the ending slash is not in the URL given, then add it.
 

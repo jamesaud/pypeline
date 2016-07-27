@@ -26,7 +26,7 @@ class DockerClient:
         if info:
             message += str.encode(info) + b": "
         for line in generator:
-            logging.info(message + line)
+            print(message + line)
 
 
     # Improve - should have option for registry and login credentials.
@@ -78,6 +78,7 @@ class DockerClient:
         """
         cls.cli.remove_image(image, True)
         logging.info("Removed image: " + image)
+        print("Removed image: " + image)
 
     @classmethod
     def remove_container(cls, container):
@@ -88,6 +89,7 @@ class DockerClient:
         """
         cls.cli.remove_container(container, True)
         logging.info("Removed container : " + container)
+        print("Removed container : " + container)
 
     @classmethod
     def build(cls, dockerfile_path, image_name, dockerfile=None):
@@ -98,6 +100,7 @@ class DockerClient:
         :return: None
         """
         logging.info("Building image " + image_name)
+        print("Building image " + image_name)
         logs_generator = cls.cli.build(path=dockerfile_path, rm=True, tag=image_name, dockerfile=dockerfile)
         cls.print_generator(logs_generator)
 
@@ -141,6 +144,7 @@ class DockerClient:
         """
         container = cls.cli.create_container(image=image, name=container_name, detach=True, command=args)  # Returns dict
         logging.info('Created container (did not run yet) with commands: ' + args)
+        print('Created container (did not run yet) with commands: ' + args)
         return container['Id']  # Get id from dictionary
 
     @classmethod
@@ -155,6 +159,7 @@ class DockerClient:
         """
         cls.cli.start(container_id)  # Start the container
         logging.info('Running container: ' + container_id)
+        print('Running container: ' + container_id)
         logs = cls.cli.logs(container=container_id, stdout=True, stream=True)
         cls.print_generator(logs, container_id)
 
@@ -168,6 +173,7 @@ class DockerClient:
         cls.cli.stop(container=container)
         cls.cli.remove_container(container=container, v=True)  # v=True means force remove
         logging.info('Removed container: ' + container)
+        print('Removed container: ' + container)
 
 
     # def inside_container(container_id, args):
@@ -193,7 +199,9 @@ class DockerClient:
         status = login_data.get('Status')
         if status is not None:
             logging.info(status)
+            print(status)
         else:
             logging.info('Failed to login. You may have logged in already, or the login credentials are invalid.')
+            print('Failed to login. You may have logged in already, or the login credentials are invalid.')
 
 
