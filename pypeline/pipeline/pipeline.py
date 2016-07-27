@@ -12,6 +12,7 @@ class Pipeline(object):
     A pipeline is a workspace with methods to do the pipeline process.
     The pipeline process is: clone from Git, build image, run containers, push image to repository.
     """
+
     def __init__(self):
         """
         Initialize class, create work directory and chdir into it.
@@ -20,9 +21,8 @@ class Pipeline(object):
         """
         work_directory = str(uuid4())
         os.makedirs(work_directory)  # Creates workspace for this pipeline
-        os.chdir(work_directory)
         self.cloned_directory = None  # Set when calling self.clone()
-        self.work_directory = os.path.abspath('.')  # Save as full path
+        self.work_directory = os.path.abspath(os.path.join(os.getcwd(), work_directory))  # Save as full path
 
     def clone(self, git_url):
         """
@@ -31,8 +31,9 @@ class Pipeline(object):
         :return: None
         """
         git_workspace = str(uuid4())
-        call(['git', 'clone', git_url, git_workspace])  # Clone in a unique directory.
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)  # Path looks like 'work_directory/git_directory'
+        print('Cloning from: ' + git_url)
+        call(['git', 'clone', git_url, self.cloned_directory])  # Clone in a unique directory.
 
     def build(self, image_tag=str(uuid4()), path='.', dockerfile='Dockerfile'):
         """

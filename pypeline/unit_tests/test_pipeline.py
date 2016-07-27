@@ -5,7 +5,7 @@ from pypeline.config.docker_client import DockerClient as dc
 
 import pypeline.unit_tests.test_helper as th
 from pypeline.pipeline.pipeline import Pipeline
-
+from pypeline.config.config import clientsetup
 """
 This is a tricky, messy unit test because there are workspaces and docker images and containers created.
 It should all (mostly?) clean up by the end though, and uses busybox image to maintain fast test speeds.
@@ -18,6 +18,7 @@ class Image_And_Container_Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):  # Run once for class
         """ Creates a pipeline and pulls a busybox image """
+        clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
         cls.pipe = Pipeline()
         cls.image = cls.pipe.pull('busybox:latest')
 
@@ -37,9 +38,9 @@ class Image_And_Container_Test(unittest.TestCase):
 
     def test_tag(self):
         """ Should add a tag to an image """
-        repo, tagged = 'my.repo.com/james', 'newest'
-        self.image.tag(repo, tagged)
-        self.assertIn(repo + ':' + tagged, dc.find_image(self.image.name)['RepoTags'])
+        tagged= 'my.repo.com/james:newest'
+        self.image.tag(tagged)
+        self.assertIn(tagged, dc.find_image(self.image.name)['RepoTags'])
 
 
     @classmethod
@@ -52,6 +53,7 @@ class TestPipeline(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """ Creates a pipeline and clones a dockerfile repo from github """
+        clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
         cls.pipe = Pipeline()
         cls.pipe.clone('https://github.com/jamesaud/simplest_docker')  # Clone has to run before many of the other methods.
         # The dockerfile includes a barebones alpine image

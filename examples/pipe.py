@@ -17,7 +17,7 @@ def test():
     """
     Good way to run a pipeline.
     """
-    clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')g
+    clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
     with Pipeline() as pipe:  # Cleans up (deletes work_directory) automatically at the end of the block.
         pipe.clone('https://github.cerner.com/JA048043/docker_test')
         test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", path="dockerstuff")

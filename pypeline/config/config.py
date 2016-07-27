@@ -9,13 +9,6 @@ Set configuration in init.py.
 """
 
 DEFAULT_REGISTRY = 'https://index.docker.io/v1/'
-LOGGING_LEVEL = logging.INFO
-
-
-def _set_logger():
-    # Set the logger to log info to stdout
-    logging.basicConfig(level=LOGGING_LEVEL, format='%(message)s')
-
 
 def clientsetup(docker_base_url=None,
           TLS=None,
@@ -49,4 +42,3 @@ def clientsetup(docker_base_url=None,
 
     CLIENT = docker.Client(base_url=docker_base_url, tls=TLS_CONFIG)
     DockerClient.assign_client(CLIENT)
-    _set_logger()

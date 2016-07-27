@@ -78,9 +78,8 @@ class Image(object):
     def tag(self, name):
         """
         Tag the image.
-        :param repo: Str - the registry + repo name eg. 'dockerhub.com/james/myrepo'
-        :param tagged: Str - the tag to give the image. eg. 'coolv2'. Defaults to 'latest'
-        :return: self
+        :param name: Str - the registry + repo name eg. 'dockerhub.com/james/myrepo'
+\        :return: self
         - The image name will now be repo:tag, eg. self.__nametag__ = 'james/myrepo:coolv2'
         """
         try:

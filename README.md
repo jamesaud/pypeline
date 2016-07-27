@@ -1,5 +1,5 @@
 ## Pypeline
-A docker pipeline built in python. The ability to execute the following workflow:
+A docker pipeline built in python. The ability to execute and design workflows. It might look like:
 
 *clone from github - build docker image - run tests in docker container(s) - push to docker repository*
 
@@ -8,7 +8,9 @@ The **pipeline** module and **generic pipeline** module allow you to generate pi
 Please checkout the examples in 'examples' for full code.
 
 ### Pipeline
-Create complex pipelines that allow for fast and flexible docker deployments. It is based on the [docker-py](https://github.com/docker/docker-py/blob/master/docs/api.md "dockerpy") api.
+Create complex pipelines that allow for fast and flexible docker deployments. 
+
+It is build upon [docker-py](https://github.com/docker/docker-py/blob/master/docs/api.md "dockerpy"), a python wrapper around the REST api of the docker daemon.
 
 This first example is drawn out and done 'the long way', but showcases some of the important operations available.
 
@@ -16,11 +18,13 @@ Before being able to do any pipeline code, you have to specify where the docker 
 
 `clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')`
 
+default=True 
+
 Or on unix:
 
 `clientsetup(docker_base_url=unix://var/run/docker.sock)`
 
-Refer to https://github.com/docker/docker-py/blob/master/docs/api.md, the docker-py api.
+Refer to [the docker-py api](https://github.com/docker/docker-py/tree/master/docs "the docker-py api").
 ```python
 from pypeline.pipeline import Pipeline
 from pypeline.config import clientsetup
@@ -62,6 +66,16 @@ with GenericPipeline() as GP:
         GP.login(username='justatest1232123', password='Justatest123')  # Optional registry and repository argument
         GP.push('latest')  # Tag before it pushes.
 ```
+
+Look in the examples folder for full examples of these two modules.
+
+*generic-cline.py* is an example of a built generic pipeline that allows for command line input.
+
+>python3 generic-cline.py --username justatest1232123 --password Justatest123 --url \
+
+>https://github.cerner.com/JA048043/docker_test --test 'echo "hello world"' --test 'echo "hi"'
+
+
 ## Motivation
 
 ###Problem Statement
@@ -71,12 +85,17 @@ Manually doing CI/CD using docker can be a bloated process, including configurat
 To provide a clear structure for building CI/CD pipelines with docker. This is an Object Oriented approach to building pipelines that requires very little code to get up and running.
 
 ## Installation
-Make sure you have python3
->git clone https://github.cerner.com/JA048043/pypeline
+Make sure you have python3.
 
+You must have git installed with command line input, because the pipeline uses the shell command 'git clone'.
+
+How to install:
+
+>git clone https://github.cerner.com/JA048043/pypeline
 
 >cd pypeline
 
+>pip3 install -r requirements.txt
 
 >python3 setup.py install
 
@@ -168,7 +187,7 @@ Image is a representation of a docker image. It is returned when calling 'Pipeli
 
 Creates a docker container based on the image. Does **not** run it.
 
-Use either <Container>.run(), or <Image>.run_container() to run a container.
+Use either \<Container\>.run(), or \<Image\>.run_container() to run a container.
 
 **Params**:
 
@@ -320,6 +339,14 @@ Closes the Pipeline() that was opened. Is called automatically using 'with' synt
 ## Tests
 
 Unit tests are only provided for the pipeline, not the generic pipeline. They are in the unit_tests folder. Something to note is that a side effect of testing might be that a small busybox or alpine image remains on your machine.
+
+You'll have to specify the docker client in the 'setUpClass' methods for each class in the test files.
+
+## Jenkins
+
+You just need to install this package on your jenkins machine to be able to use it.
+
+Instructions are here:  https://github.cerner.com/JA048043/dockerized-jenkins-pypeline
 
 ## Contributors
 

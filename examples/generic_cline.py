@@ -15,7 +15,8 @@ def tag_with_time():
     return datetime.now().utcnow().strftime('%Y-%m-%d--%Hh%Mm%Ss')
 
 
-def run(registry, registry_username, registry_password, git_url, *test):
+def run(registry, registry_username, registry_password, git_url, repository, *test):
+    print(registry + '\n\n\n')
     """
     Using an alpine image.
     """
@@ -26,13 +27,13 @@ def run(registry, registry_username, registry_password, git_url, *test):
         stage("Test")
         GP.test(*test)  # Run parallel commands in separate containers
         stage("Push")
-        GP.login(username=registry_username, password=registry_password, registry=registry)  # Optional registry argument
+        GP.login(username=registry_username, password=registry_password, registry=registry, repository=repository)  # Optional registry argument
         GP.push(tag_with_time())  # Tag before it pushes, defaults to latest with no argument
 
 
 if __name__ == "__main__":
     # Validation to make sure that the arguments are entered correctly.
-    args = {'registry': None, 'username': None, 'password': None, 'url': None, 'test': []}
+    args = {'registry': None, 'username': None, 'password': None, 'url': None, 'repository' : None, 'test': []}
     res = re.findall('--[^--]*', ' '.join(sys.argv[1:]) + ' ')
     for item in res:
         try:
@@ -46,4 +47,6 @@ if __name__ == "__main__":
                 args['test'].append(value)
             else:
                 args[keyword] = value
-    run(args['registry'], args['username'], args['password'], args['url'], *args['test'])
+    print('\n\n\n\n')
+    print(args)
+    run(args['registry'], args['username'], args['password'], args['url'], args['repository'], *args['test'])
