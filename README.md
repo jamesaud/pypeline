@@ -342,6 +342,12 @@ Unit tests are only provided for the pipeline, not the generic pipeline. They ar
 
 You'll have to specify the docker client in the 'setUpClass' methods for each class in the test files.
 
+## Jenkins
+
+You just need to install this package on your jenkins machine to be able to use it.
+
+Instructions are here:  https://github.cerner.com/JA048043/dockerized-jenkins-pypeline
+
 ## Contributors
 
 James Audretsch: jamaudre@indiana.edu james.audretsch@cerner.com
