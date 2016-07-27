@@ -340,6 +340,8 @@ Closes the Pipeline() that was opened. Is called automatically using 'with' synt
 
 Unit tests are only provided for the pipeline, not the generic pipeline. They are in the unit_tests folder. Something to note is that a side effect of testing might be that a small busybox or alpine image remains on your machine.
 
+You'll have to specify the docker client in the 'setUpClass' methods for each class in the test files.
+
 ## Contributors
 
 James Audretsch: jamaudre@indiana.edu james.audretsch@cerner.com
