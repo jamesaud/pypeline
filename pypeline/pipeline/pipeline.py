@@ -31,6 +31,7 @@ class Pipeline(object):
         """
         git_workspace = str(uuid4())
         self.cloned_directory = os.path.join(self.work_directory, git_workspace)  # Path looks like 'work_directory/git_directory'
+        print('Cloning from: ' + git_url)
         call(['git', 'clone', git_url, self.cloned_directory])  # Clone in a unique directory.
 
     def build(self, image_tag=str(uuid4()), path='.', dockerfile='Dockerfile'):
