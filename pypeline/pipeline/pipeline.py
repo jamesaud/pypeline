@@ -12,6 +12,7 @@ class Pipeline(object):
     A pipeline is a workspace with methods to do the pipeline process.
     The pipeline process is: clone from Git, build image, run containers, push image to repository.
     """
+
     def __init__(self):
         """
         Initialize class, create work directory and chdir into it.
