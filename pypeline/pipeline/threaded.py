@@ -16,3 +16,4 @@ class Parallel:
         for future in concurrent.futures.as_completed(self.future_to_add):
             if future.exception() is not None:
                 raise future.exception()
+
