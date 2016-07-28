@@ -69,7 +69,7 @@ with GenericPipeline() as GP:
 
 Look in the examples folder for full examples of these two modules.
 
-*generic-cline.py* is an example of a built generic pipeline that allows for command line input.
+*generic_cline.py* is an example of a built generic pipeline that allows for command line input.
 
 >python3 generic-cline.py --username justatest1232123 --password Justatest123 --url \
 
