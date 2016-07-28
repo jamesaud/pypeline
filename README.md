@@ -71,7 +71,7 @@ Look in the examples folder for full examples of these two modules.
 
 *generic_cline.py* is an example of a built generic pipeline that allows for command line input.
 
->python3 generic-cline.py --username justatest1232123 --password Justatest123 --url \
+>python3 generic_cline.py --username justatest1232123 --password Justatest123 --url \
 
 >https://github.cerner.com/JA048043/docker_test --test 'echo "hello world"' --test 'echo "hi"'
 
