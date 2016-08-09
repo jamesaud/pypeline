@@ -46,7 +46,7 @@ However, it is possible and recommended to make the code much more compact.
 Python's 'with' syntax provides an automatic closure at the end of the block.
 ```python
 with Pipeline() as pipe:
-        pipe.clone('https://github.cerner.com/JA048043/docker_test')
+        pipe.clone('https://github.com/jamesaud/simplest_docker')
         with pipe.build() as myImage, myImage.run_container('echo "unit-tests"'):
             myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage:latest").push()
 #  The image and container are automatically deleted when the block ends.
