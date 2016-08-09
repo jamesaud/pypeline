@@ -31,7 +31,7 @@ from pypeline.config import clientsetup
 
 clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
 with Pipeline() as pipe:
-    pipe.clone('https://github.cerner.com/JA048043/docker_test')  # clone from git
+    pipe.clone('https://github.com/jamesaud/simplest_docker')  # clone from git
     test_image = pipe.build('justatest1232123/myawesomeimage')  # build with name
     container = test_image.container('echo "rspec"') # run commands in container
     container.run()  # creating and then running containers follows the docker daemon REST api
@@ -48,7 +48,7 @@ Python's 'with' syntax provides an automatic closure at the end of the block.
 with Pipeline() as pipe:
         pipe.clone('https://github.com/jamesaud/simplest_docker')
         with pipe.build() as myImage, myImage.run_container('echo "unit-tests"'):
-            myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage:latest").push()
+            myImage.tag("jamesaudretsch/myawesomeimage:latest").push()
 #  The image and container are automatically deleted when the block ends.
 ```
 
@@ -73,7 +73,7 @@ Look in the examples folder for full examples of these two modules.
 
 >python3 generic_cline.py --username justatest1232123 --password Justatest123 --url \
 
->https://github.cerner.com/JA048043/docker_test --test 'echo "hello world"' --test 'echo "hi"'
+>https://github.com/jamesaud/simplest_docker --test 'echo "hello world"' --test 'echo "hi"'
 
 
 ## Motivation
@@ -91,7 +91,7 @@ You must have git installed with command line input, because the pipeline uses t
 
 How to install:
 
->git clone https://github.cerner.com/JA048043/pypeline
+>git clone https://github.com/jamesaud/pypeline
 
 >cd pypeline
 
@@ -346,10 +346,10 @@ You'll have to specify the docker client in the 'setUpClass' methods for each cl
 
 You just need to install this package on your jenkins machine to be able to use it.
 
-Instructions are here:  https://github.cerner.com/JA048043/dockerized-jenkins-pypeline
+Instructions are here:  https://github.com/jamesaud/dockerized-jenkins-pypeline
 
 ## Contributors
 
-James Audretsch: jamaudre@indiana.edu james.audretsch@cerner.com
+James Audretsch: jamaudre@indiana.edu
 
 ## License
