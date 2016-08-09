@@ -19,7 +19,7 @@ def test():
     """
     clientsetup(default=True, docker_base_url='https://192.168.99.100:2376')
     with Pipeline() as pipe:  # Cleans up (deletes work_directory) automatically at the end of the block.
-        pipe.clone('https://github.cerner.com/JA048043/docker_test')
+        pipe.clone('https://github.com/jamesaud/simplest_docker')
         test_image = pipe.build()  # Build image, optional name, optional directory path: pipe.build("myImgName", path="dockerstuff")
         test_image.container('sleep 6').remove()  # Run container with optional command. delete container after.
         test_image.tag('justatest1232123/myawesomeimage:solid')  # Tag it with a solid name
@@ -33,7 +33,7 @@ def test():
     A shorter way to achieve the same results
     """
     with Pipeline() as pipe:
-        pipe.clone('https://github.cerner.com/JA048043/docker_test')
+        pipe.clone('https://github.com/jamesaud/simplest_docker')
         with pipe.build() as myImage, myImage.run_container('sleep 6'):  # Image removes itself, container removes itself.
             myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push()  # If you don't give it a tag, it defaults to latest
 
@@ -54,9 +54,9 @@ def test():
     """
     pipe = Pipeline()
     test_image = pipe.pull('busybox')  # Pull image
-    test_image.remove()
-    pipe.clone('https://github.cerner.com/JA048043/docker_test')  # Clone from git
-    test_image = pipe.build('myawesomeimage',)  # Build image, optional directory path as second argument.
+    test_image.remove()  # Remove image
+    pipe.clone('https://github.com/jamesaud/simplest_docker')  # Clone from git
+    test_image = pipe.build('myawesomeimage')  # Build image, optional directory path as second argument.
     container1 = test_image.container(args='sleep 6', name='myawesomecontainer')  # Create container, optional name
     container1.run()  # Run container
     container1.remove()  # Destroy container
