@@ -35,7 +35,7 @@ def test():
     with Pipeline() as pipe:
         pipe.clone('https://github.com/jamesaud/simplest_docker')
         with pipe.build() as myImage, myImage.run_container('sleep 6'):  # Image removes itself, container removes itself.
-            myImage.tag("dockerhub.cerner.com/jamesaudretsch/myawesomeimage").push()  # If you don't give it a tag, it defaults to latest
+            myImage.tag("jamesaudretsch/myawesomeimage").push()  # If you don't give it a tag, it defaults to latest
 
 
 
